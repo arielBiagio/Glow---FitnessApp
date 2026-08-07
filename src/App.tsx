@@ -8,6 +8,8 @@ import { useWorkoutProgress } from './hooks/useWorkoutProgress';
 import confetti from 'canvas-confetti';
 import gsap from 'gsap';
 
+const TABS = ['dia-a', 'dia-b', 'dia-c', 'dia-d', 'semana'];
+
 export default function App() {
   const {
     activeTab,
@@ -25,6 +27,8 @@ export default function App() {
   } = useWorkoutProgress();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
   useEffect(() => {
     if (activeTab === 'semana') return;
@@ -81,8 +85,38 @@ export default function App() {
     }
   };
 
+  // Touch Swipe Gesture Handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+
+    const deltaX = touchStartX.current - touchEndX;
+    const deltaY = touchStartY.current - touchEndY;
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    // Minimum swipe threshold & lock to horizontal intent
+    if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      const currentIndex = TABS.indexOf(activeTab);
+      if (deltaX > 0 && currentIndex < TABS.length - 1) {
+        // Swiped Left -> Next Tab
+        handleSelectTab(TABS[currentIndex + 1]);
+      } else if (deltaX < 0 && currentIndex > 0) {
+        // Swiped Right -> Previous Tab
+        handleSelectTab(TABS[currentIndex - 1]);
+      }
+    }
+  };
+
   return (
-    <div className="w-full h-full min-h-screen bg-[#030307] flex items-center justify-center">
+    <div className="w-full h-full min-h-screen bg-[#030307] flex items-center justify-center select-none">
 
       <div className="app-shell w-full max-w-md h-screen bg-[#07070E] flex flex-col relative md:border-x md:border-white/5 md:shadow-2xl overflow-hidden">
 
@@ -119,6 +153,8 @@ export default function App() {
 
         <div
           ref={scrollContainerRef}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           className="flex-1 overflow-y-auto px-4 pt-4 pb-24 hide-scrollbar relative z-10"
         >
           {activeTab === 'semana' ? (
