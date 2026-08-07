@@ -1,0 +1,17 @@
+{
+  "name": "GLOW Cele — Bio-Performance Tracker",
+  "short_name": "GLOW Cele",
+  "description": "Rutina de entrenamiento y seguimiento de hipertrofia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07070E",
+  "theme_color": "#07070E",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
