@@ -102,14 +102,11 @@ export default function App() {
     touchStartX.current = null;
     touchStartY.current = null;
 
-    // Minimum swipe threshold & lock to horizontal intent
     if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
       const currentIndex = TABS.indexOf(activeTab);
       if (deltaX > 0 && currentIndex < TABS.length - 1) {
-        // Swiped Left -> Next Tab
         handleSelectTab(TABS[currentIndex + 1]);
       } else if (deltaX < 0 && currentIndex > 0) {
-        // Swiped Right -> Previous Tab
         handleSelectTab(TABS[currentIndex - 1]);
       }
     }
@@ -118,13 +115,14 @@ export default function App() {
   return (
     <div className="w-full h-full min-h-screen bg-[#030307] flex items-center justify-center select-none">
 
-      <div className="app-shell w-full max-w-md h-screen bg-[#07070E] flex flex-col relative md:border-x md:border-white/5 md:shadow-2xl overflow-hidden">
+      <div className="app-shell w-full max-w-md h-dvh h-screen bg-[#07070E] flex flex-col relative md:border-x md:border-white/5 md:shadow-2xl overflow-hidden">
 
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-plasma/20 blur-[85px] pointer-events-none"></div>
         <div className="absolute bottom-20 right-[-10%] w-64 h-64 rounded-full bg-emerald-500/10 blur-[80px] pointer-events-none"></div>
         <div className="absolute top-[35%] left-[-20%] w-56 h-56 rounded-full bg-[#7B61FF]/15 blur-[75px] pointer-events-none"></div>
 
-        <div className="bg-[#0A0A14]/85 backdrop-blur-md border-b border-white/5 px-5 py-4 flex items-center justify-between select-none z-10">
+        {/* Top Navbar with iOS Safe Area Inset Support */}
+        <div className="bg-[#0A0A14]/85 backdrop-blur-md border-b border-white/5 px-5 pt-[calc(env(safe-area-inset-top,0px)+12px)] pb-3 flex items-center justify-between select-none z-10">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-plasma/10 border border-plasma/30 flex items-center justify-center">
               <Activity className="w-3.5 h-3.5 text-plasma animate-pulse" />
@@ -142,7 +140,7 @@ export default function App() {
 
         {toastMessage && (
           <div
-            className="absolute top-16 left-4 right-4 z-50 bg-[#101020] border border-emerald-500/30 text-emerald-400 font-mono text-[9px] uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-lg shadow-emerald-500/5 flex items-center justify-center gap-2 animate-bounce"
+            className="absolute top-[calc(env(safe-area-inset-top,0px)+60px)] left-4 right-4 z-50 bg-[#101020] border border-emerald-500/30 text-emerald-400 font-mono text-[9px] uppercase tracking-wider py-2.5 px-4 rounded-xl shadow-lg shadow-emerald-500/5 flex items-center justify-center gap-2 animate-bounce"
             role="alert"
             aria-live="assertive"
           >
@@ -155,7 +153,7 @@ export default function App() {
           ref={scrollContainerRef}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="flex-1 overflow-y-auto px-4 pt-4 pb-24 hide-scrollbar relative z-10"
+          className="flex-1 overflow-y-auto px-4 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+110px)] hide-scrollbar relative z-10"
         >
           {activeTab === 'semana' ? (
             <WeeklySchedule
