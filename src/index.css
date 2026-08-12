@@ -80,6 +80,17 @@
     transform-origin: top center;
   }
 
+  @keyframes routine-menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
   @keyframes routine-content-in {
     from {
       opacity: 0;
@@ -94,7 +105,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .routine-content-transition {
+    .routine-content-transition,
+    [class*="routine-menu-in"] {
       animation: none;
     }
   }
