@@ -174,6 +174,7 @@ export default function App() {
             error={routineError}
           />
 
+          <div key={selectedRoutine?.id ?? 'routine-loading'} className="routine-content-transition">
           {!selectedRoutine ? (
             <div className="glass-card rounded-[2rem] p-6 text-center text-sm text-zinc-400">
               {routineLoading ? 'Cargando rutinas…' : routineError || 'No hay una rutina disponible.'}
@@ -196,6 +197,7 @@ export default function App() {
               onClearDay={onClearDay}
             />
           )}
+          </div>
         </div>
 
         <BottomNav

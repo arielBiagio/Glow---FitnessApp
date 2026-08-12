@@ -2,7 +2,7 @@
   "routines": [
     {
       "id": "glow-cele-split",
-      "name": "GLOW Cele — Split Glúteo",
+      "name": "Rutina N°1 — Glúteos",
       "description": "Programa de hipertrofia con prioridad en glúteos, isquiotibiales y aductores",
       "level": "Intermedio",
       "frequency": "4 días/semana",
@@ -12,7 +12,7 @@
     },
     {
       "id": "upper-lower-hypertrophy",
-      "name": "Upper/Lower — Hipertrofia",
+      "name": "Rutina N°2 — Upper/Lower",
       "description": "Split de tren superior e inferior enfocado en hipertrofia muscular con progresión de carga",
       "level": "Intermedio",
       "frequency": "4 días/semana",
@@ -22,7 +22,7 @@
     },
     {
       "id": "fuerza-funcional",
-      "name": "Fuerza Funcional 4x",
+      "name": "Rutina N°3 — Fuerza",
       "description": "Rutina de fuerza funcional con movimientos compuestos y trabajo de core integrado",
       "level": "Intermedio-Avanzado",
       "frequency": "4 días/semana",
@@ -32,7 +32,7 @@
     },
     {
       "id": "full-body-foundation",
-      "name": "Full Body — Base Atlética",
+      "name": "Rutina N°4 — Base",
       "description": "Tres sesiones de cuerpo completo para construir fuerza, movilidad y capacidad de trabajo",
       "level": "Inicial-Intermedio",
       "frequency": "3 días/semana",
