@@ -36,11 +36,37 @@ export interface WorkoutDay {
   sections: Section[];
 }
 
+export interface RoutineManifestEntry {
+  id: string;
+  name: string;
+  description: string;
+  level: string;
+  frequency: string;
+  goal: string;
+  accentColor: string;
+  file: string;
+}
+
+export interface Routine {
+  id: string;
+  name: string;
+  description: string;
+  author: string;
+  level: string;
+  frequency: string;
+  goal: string;
+  accentColor: string;
+  days: WorkoutDay[];
+  weeklySchedule: WeeklyScheduleItem[];
+  scienceFactors: ScienceFactor[];
+}
+
 export interface WeeklyScheduleItem {
   day: string;
   session: string;
   name: string;
   color: string;
+  dayId?: string;
 }
 
 export interface ScienceFactor {
