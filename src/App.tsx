@@ -175,28 +175,28 @@ export default function App() {
           />
 
           <div key={selectedRoutine?.id ?? 'routine-loading'} className="routine-content-transition">
-          {!selectedRoutine ? (
-            <div className="glass-card rounded-[2rem] p-6 text-center text-sm text-zinc-400">
-              {routineLoading ? 'Cargando rutinas…' : routineError || 'No hay una rutina disponible.'}
-            </div>
-          ) : activeTab === 'semana' ? (
-            <WeeklySchedule
-              weeklySchedule={selectedRoutine.weeklySchedule}
-              scienceFactors={selectedRoutine.scienceFactors}
-              onSelectDay={onSelectTab}
-              onClearProgress={onClearAll}
-            />
-          ) : (
-            <WorkoutConsole
-              activeDayId={activeTab}
-              days={selectedRoutine.days}
-              completedExercises={completedExercises}
-              completedSets={completedSets}
-              onToggleSet={handleToggleSet}
-              onToggleCompleted={handleToggleCompleted}
-              onClearDay={onClearDay}
-            />
-          )}
+            {!selectedRoutine ? (
+              <div className="glass-card rounded-[2rem] p-6 text-center text-sm text-zinc-400">
+                {routineLoading ? 'Cargando rutinas…' : routineError || 'No hay una rutina disponible.'}
+              </div>
+            ) : activeTab === 'semana' ? (
+              <WeeklySchedule
+                weeklySchedule={selectedRoutine.weeklySchedule}
+                scienceFactors={selectedRoutine.scienceFactors}
+                onSelectDay={onSelectTab}
+                onClearProgress={onClearAll}
+              />
+            ) : (
+              <WorkoutConsole
+                activeDayId={activeTab}
+                days={selectedRoutine.days}
+                completedExercises={completedExercises}
+                completedSets={completedSets}
+                onToggleSet={handleToggleSet}
+                onToggleCompleted={handleToggleCompleted}
+                onClearDay={onClearDay}
+              />
+            )}
           </div>
         </div>
 

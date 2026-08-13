@@ -26,12 +26,12 @@ export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelec
         </div>
 
         <div className="space-y-2">
-          {weeklySchedule.map((sched, idx) => {
+          {weeklySchedule.map((sched) => {
             const isDescanso = sched.session === "Descanso";
 
             return (
               <div
-                key={idx}
+                key={`${sched.day}-${sched.session}`}
                 onClick={() => {
                   if (!isDescanso) {
                     const mappedId = sched.dayId ?? `dia-${sched.session.toLowerCase()}`;
@@ -91,8 +91,8 @@ export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelec
         </div>
 
         <div className="space-y-4">
-          {scienceFactors.map((factor, idx) => (
-            <div key={idx} className="flex gap-2.5">
+          {scienceFactors.map((factor) => (
+            <div key={factor.element} className="flex gap-2.5">
               <CheckCircle2 className="w-4 h-4 text-[#7B61FF] mt-0.5 flex-shrink-0" />
               <div>
                 <h4 className="font-sans font-semibold text-xs text-zinc-200">

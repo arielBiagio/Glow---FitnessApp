@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import ExerciseCard from './ExerciseCard';
 import { Clock, Info, RotateCcw } from 'lucide-react';
 import gsap from 'gsap';
@@ -25,7 +25,10 @@ export default function WorkoutConsole({
 }: WorkoutConsoleProps) {
   const activeDay = days.find((day) => day.id === activeDayId) || days[0];
   const progressCircleRef = useRef<SVGCircleElement>(null);
-  const allExercises = activeDay?.sections.flatMap((section) => section.exercises) ?? [];
+  const allExercises = useMemo(
+    () => activeDay?.sections.flatMap((section) => section.exercises) ?? [],
+    [activeDay],
+  );
   const totalExercises = allExercises.length;
 
   const dayCompletedMap = completedExercises[activeDayId] || {};
@@ -129,13 +132,13 @@ export default function WorkoutConsole({
             )}
 
             <div className="space-y-3">
-              {section.exercises.map((exercise, exIdx) => {
+              {section.exercises.map((exercise) => {
                 const exCompleted = dayCompletedMap[exercise.name] || false;
                 const exSets = completedSets[activeDayId]?.[exercise.name] || [];
 
                 return (
                   <ExerciseCard
-                    key={exIdx}
+                    key={exercise.name}
                     exercise={exercise}
                     isCompleted={exCompleted}
                     completedSets={exSets}

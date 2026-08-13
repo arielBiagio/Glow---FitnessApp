@@ -33,14 +33,23 @@ export function useWorkoutRoutines(): UseWorkoutRoutinesReturn {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const requestControllerRef = useRef<AbortController | null>(null);
+  const routineCacheRef = useRef(new Map<string, Routine>());
 
   const loadRoutine = useCallback(async (entry: RoutineManifestEntry, signal: AbortSignal) => {
-    const routine = await fetchJson<Routine>(entry.file, signal);
+    let routine = routineCacheRef.current.get(entry.id);
+    if (!routine) {
+      routine = await fetchJson<Routine>(entry.file, signal);
+      routineCacheRef.current.set(entry.id, routine);
+    }
     if (signal.aborted) return;
 
     setSelectedRoutine(routine);
     setSelectedRoutineId(routine.id);
-    localStorage.setItem('glow-selected-routine', routine.id);
+    try {
+      localStorage.setItem('glow-selected-routine', routine.id);
+    } catch {
+      // localStorage might be unavailable; the in-memory selection still works.
+    }
   }, []);
 
   useEffect(() => {
@@ -56,7 +65,12 @@ export function useWorkoutRoutines(): UseWorkoutRoutinesReturn {
         }
 
         setRoutines(manifestRoutines);
-        const persistedId = localStorage.getItem('glow-selected-routine');
+        let persistedId: string | null = null;
+        try {
+          persistedId = localStorage.getItem('glow-selected-routine');
+        } catch {
+          // Use the first routine when localStorage is unavailable.
+        }
         const entry = manifestRoutines.find((routine) => routine.id === persistedId) ?? manifestRoutines[0];
         await loadRoutine(entry, controller.signal);
         if (!controller.signal.aborted) setError(null);
@@ -75,6 +89,8 @@ export function useWorkoutRoutines(): UseWorkoutRoutinesReturn {
     };
   }, [loadRoutine]);
 
+  const loadedRoutineId = selectedRoutine?.id ?? '';
+
   const selectRoutine = useCallback(async (id: string) => {
     const entry = routines.find((routine) => routine.id === id);
     if (!entry || id === selectedRoutineId) return;
@@ -82,7 +98,7 @@ export function useWorkoutRoutines(): UseWorkoutRoutinesReturn {
     requestControllerRef.current?.abort();
     const controller = new AbortController();
     requestControllerRef.current = controller;
-    const previousRoutineId = selectedRoutineId;
+    const previousRoutineId = loadedRoutineId || selectedRoutineId;
     setSelectedRoutineId(id);
     setLoading(true);
     setError(null);
@@ -97,7 +113,7 @@ export function useWorkoutRoutines(): UseWorkoutRoutinesReturn {
     } finally {
       if (!controller.signal.aborted) setLoading(false);
     }
-  }, [loadRoutine, routines, selectedRoutineId]);
+  }, [loadRoutine, loadedRoutineId, routines, selectedRoutineId]);
 
   return { routines, selectedRoutine, selectedRoutineId, selectRoutine, loading, error };
 }
