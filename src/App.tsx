@@ -2,15 +2,23 @@ import React, { useEffect, useRef } from 'react';
 import BottomNav from './components/BottomNav';
 import WorkoutConsole from './components/WorkoutConsole';
 import WeeklySchedule from './components/WeeklySchedule';
+import RoutineSelector from './components/RoutineSelector';
 import { Activity, BellRing } from 'lucide-react';
-import { workoutData } from './data/workoutData';
 import { useWorkoutProgress } from './hooks/useWorkoutProgress';
+import { useWorkoutRoutines } from './hooks/useWorkoutRoutines';
 import confetti from 'canvas-confetti';
 import gsap from 'gsap';
 
-const TABS = ['dia-a', 'dia-b', 'dia-c', 'dia-d', 'semana'];
-
 export default function App() {
+  const {
+    routines,
+    selectedRoutine,
+    selectedRoutineId,
+    selectRoutine,
+    loading: routineLoading,
+    error: routineError,
+  } = useWorkoutRoutines();
+
   const {
     activeTab,
     completedExercises,
@@ -24,16 +32,16 @@ export default function App() {
     handleClearDayProgress,
     handleClearAllProgress,
     handleSelectTab,
-  } = useWorkoutProgress();
+  } = useWorkoutProgress(selectedRoutine);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
   useEffect(() => {
-    if (activeTab === 'semana') return;
+    if (!selectedRoutine || activeTab === 'semana') return;
 
-    const activeDay = workoutData.find(d => d.id === activeTab);
+    const activeDay = selectedRoutine.days.find((day) => day.id === activeTab);
     if (!activeDay) return;
 
     const allExercises = activeDay.sections.flatMap(s => s.exercises);
@@ -54,7 +62,7 @@ export default function App() {
       setConfettiFired(prev => ({ ...prev, [activeTab]: true }));
       showToast('¡100% del Entrenamiento Completado!');
     }
-  }, [completedExercises, activeTab, confettiFired, setConfettiFired, showToast]);
+  }, [completedExercises, activeTab, confettiFired, selectedRoutine, setConfettiFired, showToast]);
 
   useEffect(() => {
     gsap.fromTo('.app-shell',
@@ -103,11 +111,13 @@ export default function App() {
     touchStartY.current = null;
 
     if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
-      const currentIndex = TABS.indexOf(activeTab);
-      if (deltaX > 0 && currentIndex < TABS.length - 1) {
-        handleSelectTab(TABS[currentIndex + 1]);
+      const tabIds = [...(selectedRoutine?.days.map((day) => day.id) ?? []), 'semana'];
+      const currentIndex = tabIds.indexOf(activeTab);
+      if (currentIndex < 0) return;
+      if (deltaX > 0 && currentIndex < tabIds.length - 1) {
+        handleSelectTab(tabIds[currentIndex + 1]);
       } else if (deltaX < 0 && currentIndex > 0) {
-        handleSelectTab(TABS[currentIndex - 1]);
+        handleSelectTab(tabIds[currentIndex - 1]);
       }
     }
   };
@@ -155,24 +165,43 @@ export default function App() {
           onTouchEnd={handleTouchEnd}
           className="flex-1 overflow-y-auto px-4 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+110px)] hide-scrollbar relative z-10"
         >
-          {activeTab === 'semana' ? (
-            <WeeklySchedule
-              onSelectDay={onSelectTab}
-              onClearProgress={onClearAll}
-            />
-          ) : (
-            <WorkoutConsole
-              activeDayId={activeTab}
-              completedExercises={completedExercises}
-              completedSets={completedSets}
-              onToggleSet={handleToggleSet}
-              onToggleCompleted={handleToggleCompleted}
-              onClearDay={onClearDay}
-            />
-          )}
+          <RoutineSelector
+            routines={routines}
+            selectedRoutine={selectedRoutine}
+            selectedRoutineId={selectedRoutineId}
+            onSelectRoutine={selectRoutine}
+            loading={routineLoading}
+            error={routineError}
+          />
+
+          <div key={selectedRoutine?.id ?? 'routine-loading'} className="routine-content-transition">
+            {!selectedRoutine ? (
+              <div className="glass-card rounded-[2rem] p-6 text-center text-sm text-zinc-400">
+                {routineLoading ? 'Cargando rutinas…' : routineError || 'No hay una rutina disponible.'}
+              </div>
+            ) : activeTab === 'semana' ? (
+              <WeeklySchedule
+                weeklySchedule={selectedRoutine.weeklySchedule}
+                scienceFactors={selectedRoutine.scienceFactors}
+                onSelectDay={onSelectTab}
+                onClearProgress={onClearAll}
+              />
+            ) : (
+              <WorkoutConsole
+                activeDayId={activeTab}
+                days={selectedRoutine.days}
+                completedExercises={completedExercises}
+                completedSets={completedSets}
+                onToggleSet={handleToggleSet}
+                onToggleCompleted={handleToggleCompleted}
+                onClearDay={onClearDay}
+              />
+            )}
+          </div>
         </div>
 
         <BottomNav
+          days={selectedRoutine?.days ?? []}
           activeTab={activeTab}
           onSelectTab={onSelectTab}
         />

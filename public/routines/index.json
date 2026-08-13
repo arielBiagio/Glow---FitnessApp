@@ -1,0 +1,44 @@
+{
+  "routines": [
+    {
+      "id": "glow-cele-split",
+      "name": "Rutina N°1 — Glúteos",
+      "description": "Programa de hipertrofia con prioridad en glúteos, isquiotibiales y aductores",
+      "level": "Intermedio",
+      "frequency": "4 días/semana",
+      "goal": "Hipertrofia Glútea",
+      "accentColor": "#7B61FF",
+      "file": "/routines/glow-cele-split.json"
+    },
+    {
+      "id": "upper-lower-hypertrophy",
+      "name": "Rutina N°2 — Upper/Lower",
+      "description": "Split de tren superior e inferior enfocado en hipertrofia muscular con progresión de carga",
+      "level": "Intermedio",
+      "frequency": "4 días/semana",
+      "goal": "Hipertrofia General",
+      "accentColor": "#10B981",
+      "file": "/routines/upper-lower-hypertrophy.json"
+    },
+    {
+      "id": "fuerza-funcional",
+      "name": "Rutina N°3 — Fuerza",
+      "description": "Rutina de fuerza funcional con movimientos compuestos y trabajo de core integrado",
+      "level": "Intermedio-Avanzado",
+      "frequency": "4 días/semana",
+      "goal": "Fuerza y Rendimiento",
+      "accentColor": "#F59E0B",
+      "file": "/routines/fuerza-funcional.json"
+    },
+    {
+      "id": "full-body-foundation",
+      "name": "Rutina N°4 — Base",
+      "description": "Tres sesiones de cuerpo completo para construir fuerza, movilidad y capacidad de trabajo",
+      "level": "Inicial-Intermedio",
+      "frequency": "3 días/semana",
+      "goal": "Base Atlética",
+      "accentColor": "#38BDF8",
+      "file": "/routines/full-body-foundation.json"
+    }
+  ]
+}

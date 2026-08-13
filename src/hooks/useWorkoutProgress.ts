@@ -1,12 +1,25 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import type { CompletedMap, SetsMap, ConfettiMap } from '../types';
-import { workoutData } from '../data/workoutData';
+import { useCallback, useEffect, useMemo, useRef, useState, type SetStateAction } from 'react';
+import type { CompletedMap, ConfettiMap, Routine, SetsMap } from '../types';
 
-const STORAGE_KEYS = {
-  exercises: 'glow-split-completed-exercises',
-  sets: 'glow-split-completed-sets',
-  confetti: 'glow-split-confetti-fired',
-} as const;
+interface StorageKeys {
+  exercises: string;
+  sets: string;
+  confetti: string;
+}
+
+interface ProgressState {
+  completedExercises: CompletedMap;
+  completedSets: SetsMap;
+  confettiFired: ConfettiMap;
+}
+
+function getStorageKeys(routineId: string): StorageKeys {
+  return {
+    exercises: `glow-split:${routineId}:completed-exercises`,
+    sets: `glow-split:${routineId}:completed-sets`,
+    confetti: `glow-split:${routineId}:confetti-fired`,
+  };
+}
 
 function loadFromStorage<T>(key: string, fallback: T): T {
   try {
@@ -22,123 +35,176 @@ function saveToStorage(key: string, value: unknown): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    // localStorage might be full or unavailable — silently fail
+    // localStorage might be full or unavailable.
   }
 }
 
-function useDebouncedSave(key: string, value: unknown, delay = 300): void {
+function useDebouncedSave(key: string, value: unknown, enabled: boolean, delay = 300): void {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    if (!enabled) return undefined;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      saveToStorage(key, value);
-    }, delay);
+    timeoutRef.current = setTimeout(() => saveToStorage(key, value), delay);
 
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [key, value, delay]);
+  }, [key, value, enabled, delay]);
 }
 
-export function useWorkoutProgress() {
-  const [activeTab, setActiveTab] = useState('dia-a');
-
-  const [completedExercises, setCompletedExercises] = useState<CompletedMap>(() =>
-    loadFromStorage<CompletedMap>(STORAGE_KEYS.exercises, {})
-  );
-
-  const [completedSets, setCompletedSets] = useState<SetsMap>(() =>
-    loadFromStorage<SetsMap>(STORAGE_KEYS.sets, {})
-  );
-
-  const [confettiFired, setConfettiFired] = useState<ConfettiMap>(() =>
-    loadFromStorage<ConfettiMap>(STORAGE_KEYS.confetti, {})
-  );
-
+export function useWorkoutProgress(routine: Routine | null) {
+  const [activeTab, setActiveTab] = useState('semana');
+  const [progress, setProgress] = useState<ProgressState>({
+    completedExercises: {},
+    completedSets: {},
+    confettiFired: {},
+  });
   const [toastMessage, setToastMessage] = useState('');
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadedRoutineIdRef = useRef<string | null>(null);
 
-  useDebouncedSave(STORAGE_KEYS.exercises, completedExercises);
-  useDebouncedSave(STORAGE_KEYS.sets, completedSets);
-  useDebouncedSave(STORAGE_KEYS.confetti, confettiFired);
+  const routineId = routine?.id ?? '';
+  const storageKeys = useMemo(() => getStorageKeys(routineId), [routineId]);
 
-  const showToast = useCallback((msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(''), 2500);
+  const exerciseIndex = useMemo(() => {
+    const index = new Map<string, { loggable?: boolean; sets?: number }>();
+    routine?.days.forEach((day) => {
+      day.sections.forEach((section) => {
+        section.exercises.forEach((exercise) => {
+          index.set(`${day.id}:${exercise.name}`, exercise);
+        });
+      });
+    });
+    return index;
+  }, [routine]);
+
+  useEffect(() => {
+    loadedRoutineIdRef.current = null;
+
+    if (!routine) {
+      setActiveTab('semana');
+      setProgress({ completedExercises: {}, completedSets: {}, confettiFired: {} });
+      return;
+    }
+
+    setProgress({
+      completedExercises: loadFromStorage<CompletedMap>(storageKeys.exercises, {}),
+      completedSets: loadFromStorage<SetsMap>(storageKeys.sets, {}),
+      confettiFired: loadFromStorage<ConfettiMap>(storageKeys.confetti, {}),
+    });
+    setActiveTab(routine.days[0]?.id ?? 'semana');
+    loadedRoutineIdRef.current = routine.id;
+  }, [routine, storageKeys.confetti, storageKeys.exercises, storageKeys.sets]);
+
+  const storageReady = Boolean(routine && loadedRoutineIdRef.current === routine.id);
+  useDebouncedSave(storageKeys.exercises, progress.completedExercises, storageReady);
+  useDebouncedSave(storageKeys.sets, progress.completedSets, storageReady);
+  useDebouncedSave(storageKeys.confetti, progress.confettiFired, storageReady);
+
+  const showToast = useCallback((message: string) => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToastMessage(message);
+    toastTimeoutRef.current = setTimeout(() => {
+      setToastMessage('');
+      toastTimeoutRef.current = null;
+    }, 2500);
   }, []);
 
-  const handleToggleSet = useCallback((exName: string, setIdx: number) => {
-    setCompletedSets(prevSets => {
-      const daySets: Record<string, number[]> = prevSets[activeTab] || {};
-      const currentSets: number[] = daySets[exName] || [];
+  useEffect(() => () => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+  }, []);
 
+  const setConfettiFired = useCallback((value: SetStateAction<ConfettiMap>) => {
+    setProgress((previous) => ({
+      ...previous,
+      confettiFired: typeof value === 'function' ? value(previous.confettiFired) : value,
+    }));
+  }, []);
+
+  const handleToggleSet = useCallback((exerciseName: string, setIdx: number) => {
+    if (!routine) return;
+
+    const exercise = exerciseIndex.get(`${activeTab}:${exerciseName}`);
+    if (!exercise?.loggable) return;
+
+    setProgress((previous) => {
+      const daySets = previous.completedSets[activeTab] || {};
+      const currentSets = daySets[exerciseName] || [];
       const updatedSets = currentSets.includes(setIdx)
-        ? currentSets.filter(i => i !== setIdx)
+        ? currentSets.filter((index) => index !== setIdx)
         : [...currentSets, setIdx];
+      const requiredSets = exercise.sets || 3;
 
-      const newDaySets = { ...daySets, [exName]: updatedSets };
-      const newCompletedSets = { ...prevSets, [activeTab]: newDaySets };
-
-      const dayData = workoutData.find(d => d.id === activeTab);
-      const exConfig = dayData?.sections.flatMap(s => s.exercises).find(e => e.name === exName);
-      const requiredSets = exConfig?.sets || 3;
-
-      setCompletedExercises(prevEx => {
-        const dayEx = prevEx[activeTab] || {};
-        const isNowCompleted = updatedSets.length === requiredSets;
-        const newDayEx = { ...dayEx, [exName]: isNowCompleted };
-        return { ...prevEx, [activeTab]: newDayEx };
-      });
-
-      return newCompletedSets;
+      return {
+        ...previous,
+        completedSets: {
+          ...previous.completedSets,
+          [activeTab]: { ...daySets, [exerciseName]: updatedSets },
+        },
+        completedExercises: {
+          ...previous.completedExercises,
+          [activeTab]: {
+            ...(previous.completedExercises[activeTab] || {}),
+            [exerciseName]: updatedSets.length === requiredSets,
+          },
+        },
+      };
     });
-  }, [activeTab]);
+  }, [activeTab, exerciseIndex, routine]);
 
-  const handleToggleCompleted = useCallback((exName: string) => {
-    const dayData = workoutData.find(d => d.id === activeTab);
-    const exConfig = dayData?.sections.flatMap(s => s.exercises).find(e => e.name === exName);
-    const requiredSets = exConfig?.sets || 3;
+  const handleToggleCompleted = useCallback((exerciseName: string) => {
+    if (!routine) return;
 
-    setCompletedExercises(prevEx => {
-      const dayEx = prevEx[activeTab] || {};
-      const wasCompleted = dayEx[exName] || false;
-      const isNowCompleted = !wasCompleted;
+    const exercise = exerciseIndex.get(`${activeTab}:${exerciseName}`);
+    const requiredSets = exercise?.sets || 3;
 
-      const newDayEx = { ...dayEx, [exName]: isNowCompleted };
+    setProgress((previous) => {
+      const dayExercises = previous.completedExercises[activeTab] || {};
+      const isNowCompleted = !dayExercises[exerciseName];
+      const updatedSets = isNowCompleted && exercise?.loggable
+        ? Array.from({ length: requiredSets }, (_, index) => index)
+        : [];
 
-      setCompletedSets(prevSets => {
-        const daySets = prevSets[activeTab] || {};
-        const updatedSets = isNowCompleted
-          ? Array.from({ length: requiredSets }).map((_, i) => i)
-          : [];
-        const newDaySets = { ...daySets, [exName]: updatedSets };
-        return { ...prevSets, [activeTab]: newDaySets };
-      });
-
-      if (!isNowCompleted) {
-        setConfettiFired(prev => ({ ...prev, [activeTab]: false }));
-      }
-
-      return { ...prevEx, [activeTab]: newDayEx };
+      return {
+        ...previous,
+        completedExercises: {
+          ...previous.completedExercises,
+          [activeTab]: { ...dayExercises, [exerciseName]: isNowCompleted },
+        },
+        completedSets: {
+          ...previous.completedSets,
+          [activeTab]: {
+            ...(previous.completedSets[activeTab] || {}),
+            [exerciseName]: updatedSets,
+          },
+        },
+        confettiFired: isNowCompleted
+          ? previous.confettiFired
+          : { ...previous.confettiFired, [activeTab]: false },
+      };
     });
-  }, [activeTab]);
+  }, [activeTab, exerciseIndex, routine]);
 
   const handleClearDayProgress = useCallback(() => {
-    setCompletedExercises(prevEx => ({ ...prevEx, [activeTab]: {} }));
-    setCompletedSets(prevSets => ({ ...prevSets, [activeTab]: {} }));
-    setConfettiFired(prev => ({ ...prev, [activeTab]: false }));
+    if (!routine) return;
+    setProgress((previous) => ({
+      ...previous,
+      completedExercises: { ...previous.completedExercises, [activeTab]: {} },
+      completedSets: { ...previous.completedSets, [activeTab]: {} },
+      confettiFired: { ...previous.confettiFired, [activeTab]: false },
+    }));
     showToast('Progreso del día restablecido');
-  }, [activeTab, showToast]);
+  }, [activeTab, routine, showToast]);
 
   const handleClearAllProgress = useCallback(() => {
-    setCompletedExercises({});
-    setCompletedSets({});
-    setConfettiFired({});
-    saveToStorage(STORAGE_KEYS.exercises, {});
-    saveToStorage(STORAGE_KEYS.sets, {});
-    saveToStorage(STORAGE_KEYS.confetti, {});
-    showToast('Historial completo restablecido');
-  }, [showToast]);
+    if (!routine) return;
+    setProgress({ completedExercises: {}, completedSets: {}, confettiFired: {} });
+    saveToStorage(storageKeys.exercises, {});
+    saveToStorage(storageKeys.sets, {});
+    saveToStorage(storageKeys.confetti, {});
+    showToast('Historial de esta rutina restablecido');
+  }, [routine, showToast, storageKeys.confetti, storageKeys.exercises, storageKeys.sets]);
 
   const handleSelectTab = useCallback((tabId: string) => {
     setActiveTab(tabId);
@@ -146,10 +212,9 @@ export function useWorkoutProgress() {
 
   return {
     activeTab,
-    setActiveTab,
-    completedExercises,
-    completedSets,
-    confettiFired,
+    completedExercises: progress.completedExercises,
+    completedSets: progress.completedSets,
+    confettiFired: progress.confettiFired,
     setConfettiFired,
     toastMessage,
     showToast,

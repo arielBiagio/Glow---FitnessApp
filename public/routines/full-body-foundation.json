@@ -1,0 +1,148 @@
+{
+  "id": "full-body-foundation",
+  "name": "Rutina N°4 — Base",
+  "description": "Tres sesiones de cuerpo completo para construir fuerza, movilidad y capacidad de trabajo",
+  "author": "Equipo GLOW",
+  "level": "Inicial-Intermedio",
+  "frequency": "3 días/semana",
+  "goal": "Base Atlética",
+  "accentColor": "#38BDF8",
+  "days": [
+    {
+      "id": "dia-a",
+      "name": "Día A",
+      "subtitle": "Patrón de sentadilla",
+      "tag": "Base",
+      "summary": { "warmup": 7, "main": 36, "cooldown": 7, "total": 50 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Preparación",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Caminata inclinada", "volume": "4 min", "description": "Eleva temperatura y activa la respiración." },
+            { "name": "Movilidad de cadera", "volume": "2 × 8 c/lado", "description": "Prepara el rango de movimiento de la sesión." }
+          ]
+        },
+        {
+          "title": "Cuerpo completo",
+          "badge": "Técnica",
+          "badgeStyle": "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
+          "exercises": [
+            { "name": "Goblet squat", "volume": "3 × 10", "rest": "90s", "science": "La carga frontal facilita aprender el patrón de sentadilla manteniendo el torso erguido.", "tip": "Baja con control y empuja el suelo de forma uniforme.", "isKey": true, "keyBadge": "base", "loggable": true, "sets": 3 },
+            { "name": "Press inclinado con mancuernas", "volume": "3 × 10", "rest": "90s", "science": "Un press estable desarrolla fuerza del tren superior con una curva de aprendizaje accesible.", "tip": "Mantén las muñecas apiladas sobre los codos.", "loggable": true, "sets": 3 },
+            { "name": "Remo con apoyo de pecho", "volume": "3 × 10", "rest": "90s", "science": "El apoyo reduce la demanda lumbar y permite concentrarse en la espalda.", "tip": "Lleva los codos hacia atrás sin encoger los hombros.", "loggable": true, "sets": 3 },
+            { "name": "Dead bug", "volume": "3 × 8 c/lado", "rest": "60s", "science": "El core aprende a resistir la extensión mientras las extremidades se mueven.", "tip": "Mantén la zona lumbar en contacto suave con el suelo.", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Vuelta a la calma",
+          "badge": "Recuperación",
+          "badgeStyle": "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+          "exercises": [
+            { "name": "Estiramiento de cuádriceps", "volume": "30 s c/lado", "description": "Relaja la parte frontal de la pierna." },
+            { "name": "Respiración lenta", "volume": "2 min", "description": "Finaliza la sesión con respiración nasal." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-b",
+      "name": "Día B",
+      "subtitle": "Patrón de bisagra",
+      "tag": "Cadena posterior",
+      "summary": { "warmup": 7, "main": 38, "cooldown": 7, "total": 52 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Preparación",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Bicicleta suave", "volume": "4 min", "description": "Activa piernas sin acumular fatiga." },
+            { "name": "Bisagra de cadera sin peso", "volume": "2 × 10", "description": "Practica llevar la cadera atrás con espalda neutra." }
+          ]
+        },
+        {
+          "title": "Cuerpo completo",
+          "badge": "Control",
+          "badgeStyle": "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+          "exercises": [
+            { "name": "Peso muerto rumano con mancuernas", "volume": "3 × 10", "rest": "90s", "science": "La bisagra fortalece isquios y glúteos con una carga fácil de controlar.", "tip": "Desciende hasta sentir tensión sin perder la posición de la espalda.", "isKey": true, "keyBadge": "bisagra", "loggable": true, "sets": 3 },
+            { "name": "Jalón al pecho", "volume": "3 × 10", "rest": "90s", "science": "La tracción vertical desarrolla dorsales y mejora el control de hombros.", "tip": "Lleva los codos hacia las costillas, no la barra detrás del cuello.", "loggable": true, "sets": 3 },
+            { "name": "Step-up bajo", "volume": "3 × 8 c/lado", "rest": "90s", "science": "El apoyo unilateral integra pierna, equilibrio y control de cadera.", "tip": "Sube presionando con la pierna que está sobre el cajón.", "loggable": true, "sets": 3 },
+            { "name": "Plancha frontal", "volume": "3 × 30 s", "rest": "60s", "science": "La plancha entrena la resistencia del tronco sin movimiento lumbar excesivo.", "tip": "Aprieta glúteos y abdomen mientras respiras.", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Vuelta a la calma",
+          "badge": "Recuperación",
+          "badgeStyle": "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+          "exercises": [
+            { "name": "Estiramiento de isquios", "volume": "30 s c/lado", "description": "Relaja la cadena posterior sin forzar el rango." },
+            { "name": "Movilidad de hombros", "volume": "1 min", "description": "Recupera amplitud después de los jalones." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-c",
+      "name": "Día C",
+      "subtitle": "Integración y capacidad",
+      "tag": "Full Body",
+      "summary": { "warmup": 7, "main": 34, "metabolic": 8, "cooldown": 7, "total": 49 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Preparación",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Remo suave", "volume": "4 min", "description": "Activa el cuerpo completo de forma progresiva." },
+            { "name": "World's greatest stretch", "volume": "1 × 5 c/lado", "description": "Moviliza cadera, columna y hombros." }
+          ]
+        },
+        {
+          "title": "Circuito integrado",
+          "badge": "Flujo",
+          "badgeStyle": "bg-violet-500/10 text-violet-400 border border-violet-500/20",
+          "note": "Completa 3 rondas descansando 90 segundos entre ellas. Usa cargas que permitan mantener la técnica.",
+          "exercises": [
+            { "name": "Zancada atrás con mancuerna", "volume": "3 × 8 c/lado", "rest": "90s", "science": "La zancada entrena fuerza unilateral y coordinación en un patrón sencillo.", "tip": "Da un paso suficientemente largo para que la rodilla siga la línea del pie.", "isKey": true, "keyBadge": "integración", "loggable": true, "sets": 3 },
+            { "name": "Push-up inclinado", "volume": "3 × 8-12", "rest": "90s", "science": "La inclinación permite progresar el empuje manteniendo el cuerpo alineado.", "tip": "Desciende con el pecho entre las manos, sin colapsar la cadera.", "loggable": true, "sets": 3 },
+            { "name": "Remo en polea sentado", "volume": "3 × 10", "rest": "90s", "science": "El remo horizontal equilibra el volumen de empuje y refuerza la postura.", "tip": "Pausa brevemente cuando los codos lleguen detrás del cuerpo.", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Finisher metabólico",
+          "badge": "Capacidad",
+          "badgeStyle": "bg-red-500/10 text-red-400 border border-red-500/20",
+          "exercises": [
+            { "name": "Intervalos de bicicleta", "volume": "8 min · 30s/30s", "science": "Intervalos moderados mejoran la capacidad de trabajo sin comprometer la recuperación semanal.", "tip": "Mantén un ritmo fuerte pero repetible en todas las rondas.", "loggable": true, "sets": 8 }
+          ]
+        },
+        {
+          "title": "Vuelta a la calma",
+          "badge": "Recuperación",
+          "badgeStyle": "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+          "exercises": [
+            { "name": "Estiramiento global", "volume": "4 min", "description": "Recorre las principales zonas trabajadas." },
+            { "name": "Respiración en el suelo", "volume": "2 min", "description": "Cierra el entrenamiento reduciendo pulsaciones." }
+          ]
+        }
+      ]
+    }
+  ],
+  "weeklySchedule": [
+    { "day": "Lunes", "session": "A", "dayId": "dia-a", "name": "Patrón de sentadilla", "color": "#38BDF8" },
+    { "day": "Martes", "session": "Descanso", "name": "Caminata suave", "color": "#3F3F46" },
+    { "day": "Miércoles", "session": "B", "dayId": "dia-b", "name": "Patrón de bisagra", "color": "#38BDF8" },
+    { "day": "Jueves", "session": "Descanso", "name": "Movilidad", "color": "#3F3F46" },
+    { "day": "Viernes", "session": "C", "dayId": "dia-c", "name": "Integración y capacidad", "color": "#38BDF8" },
+    { "day": "Sábado", "session": "Descanso", "name": "Actividad libre", "color": "#3F3F46" },
+    { "day": "Domingo", "session": "Descanso", "name": "Recuperación completa", "color": "#3F3F46" }
+  ],
+  "scienceFactors": [
+    { "element": "Frecuencia sostenible", "reason": "Tres sesiones de cuerpo completo permiten practicar cada patrón varias veces sin exigir entrenar todos los días." },
+    { "element": "Progresión técnica", "reason": "Los ejercicios priorizan estabilidad y control antes de aumentar carga o complejidad." },
+    { "element": "Capacidad de trabajo", "reason": "Un finisher breve añade acondicionamiento sin desplazar el trabajo de fuerza." }
+  ]
+}

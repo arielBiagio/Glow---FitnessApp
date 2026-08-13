@@ -74,4 +74,40 @@
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
+  .routine-content-transition {
+    animation: routine-content-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: top center;
+  }
+
+  @keyframes routine-menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes routine-content-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.985);
+      filter: blur(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .routine-content-transition,
+    [class*="routine-menu-in"] {
+      animation: none;
+    }
+  }
 }

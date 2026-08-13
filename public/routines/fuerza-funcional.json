@@ -1,0 +1,173 @@
+{
+  "id": "fuerza-funcional",
+  "name": "Rutina N°3 — Fuerza",
+  "description": "Rutina de fuerza funcional con movimientos compuestos y trabajo de core integrado",
+  "author": "Equipo GLOW",
+  "level": "Intermedio-Avanzado",
+  "frequency": "4 días/semana",
+  "goal": "Fuerza y Rendimiento",
+  "accentColor": "#F59E0B",
+  "days": [
+    {
+      "id": "dia-a",
+      "name": "Día A",
+      "subtitle": "Sentadilla + Empuje",
+      "tag": "Fuerza",
+      "summary": { "warmup": 8, "main": 42, "cooldown": 6, "total": 56 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Movilidad",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Bicicleta suave", "volume": "4 min", "description": "Eleva la temperatura sin fatigar las piernas." },
+            { "name": "Sentadilla goblet ligera", "volume": "2 × 10", "description": "Ensaya profundidad, respiración y control." }
+          ]
+        },
+        {
+          "title": "Fuerza principal",
+          "badge": "Compuesto",
+          "badgeStyle": "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+          "exercises": [
+            { "name": "Sentadilla frontal", "volume": "5 × 5", "rest": "150s", "science": "Las series de cinco repeticiones permiten practicar fuerza con técnica consistente y fatiga controlada.", "tip": "Mantén los codos altos y el tronco firme.", "isKey": true, "keyBadge": "fuerza", "loggable": true, "sets": 5 },
+            { "name": "Press de banca con pausa", "volume": "4 × 6", "rest": "120s", "science": "La pausa elimina el rebote y mejora la producción de fuerza desde el pecho.", "tip": "Pausa un segundo con la barra estable antes de empujar.", "loggable": true, "sets": 4 },
+            { "name": "Farmer walk", "volume": "3 × 30 m", "rest": "90s", "science": "La carga unilateral o bilateral entrena agarre, postura y estabilidad del core.", "tip": "Camina alto, con pasos cortos y costillas abajo.", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Vuelta a la calma",
+          "badge": "Recuperación",
+          "badgeStyle": "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+          "exercises": [
+            { "name": "Respiración diafragmática", "volume": "2 min", "description": "Reduce el ritmo y recupera el control respiratorio." },
+            { "name": "Movilidad de tobillo", "volume": "45 s c/lado", "description": "Libera la articulación después de las sentadillas." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-b",
+      "name": "Día B",
+      "subtitle": "Bisagra + Jalón",
+      "tag": "Cadena posterior",
+      "summary": { "warmup": 8, "main": 44, "cooldown": 6, "total": 58 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Activación",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Remo suave", "volume": "4 min", "description": "Prepara espalda y cadera para la tracción." },
+            { "name": "Bisagra con palo", "volume": "2 × 10", "description": "Practica una columna neutra y el desplazamiento de cadera." }
+          ]
+        },
+        {
+          "title": "Fuerza principal",
+          "badge": "Tracción",
+          "badgeStyle": "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
+          "exercises": [
+            { "name": "Peso muerto con trap bar", "volume": "5 × 4", "rest": "150s", "science": "La trap bar permite producir fuerza desde el suelo con una posición de torso más vertical.", "tip": "Empuja el suelo y termina extendiendo la cadera, sin inclinarte atrás.", "isKey": true, "keyBadge": "potencia", "loggable": true, "sets": 5 },
+            { "name": "Dominadas asistidas", "volume": "4 × 6-8", "rest": "120s", "science": "La tracción vertical desarrolla dorsales y control escapular.", "tip": "Inicia cada repetición deprimiendo los hombros.", "loggable": true, "sets": 4 },
+            { "name": "Pallof press", "volume": "3 × 10 c/lado", "rest": "60s", "science": "El core resiste la rotación y transfiere fuerza entre tren inferior y superior.", "tip": "No permitas que la banda gire el torso.", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Vuelta a la calma",
+          "badge": "Recuperación",
+          "badgeStyle": "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+          "exercises": [
+            { "name": "Estiramiento de dorsal", "volume": "45 s c/lado", "description": "Relaja la musculatura de tracción." },
+            { "name": "Caminata suave", "volume": "3 min", "description": "Facilita la vuelta a la calma." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-c",
+      "name": "Día C",
+      "subtitle": "Unilateral + Core",
+      "tag": "Estabilidad",
+      "summary": { "warmup": 7, "main": 40, "cooldown": 7, "total": 54 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Movilidad",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Caminata lateral con banda", "volume": "2 × 12 c/lado", "description": "Activa glúteo medio y estabilizadores de cadera." },
+            { "name": "Dead bug", "volume": "2 × 8 c/lado", "description": "Conecta respiración y control lumbo-pélvico." }
+          ]
+        },
+        {
+          "title": "Trabajo unilateral",
+          "badge": "Control",
+          "badgeStyle": "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+          "exercises": [
+            { "name": "Sentadilla búlgara", "volume": "4 × 8 c/lado", "rest": "120s", "science": "El trabajo unilateral expone asimetrías y exige estabilidad de cadera y tobillo.", "tip": "Baja verticalmente y conserva tres puntos de apoyo en el pie delantero.", "isKey": true, "keyBadge": "unilateral", "loggable": true, "sets": 4 },
+            { "name": "Press de hombro a una mano", "volume": "3 × 8 c/lado", "rest": "90s", "science": "La carga unilateral aumenta la demanda de estabilidad del tronco.", "tip": "Evita compensar inclinando el torso.", "loggable": true, "sets": 3 },
+            { "name": "Plancha lateral", "volume": "3 × 30 s c/lado", "rest": "60s", "science": "Fortalece la resistencia lateral del core y la estabilidad pélvica.", "tip": "Empuja el suelo y mantén la cadera elevada.", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Vuelta a la calma",
+          "badge": "Recuperación",
+          "badgeStyle": "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+          "exercises": [
+            { "name": "Estiramiento de flexor de cadera", "volume": "45 s c/lado", "description": "Libera la parte anterior de la cadera." },
+            { "name": "Rotación torácica", "volume": "8 reps c/lado", "description": "Recupera movilidad de la columna torácica." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-d",
+      "name": "Día D",
+      "subtitle": "Potencia + Acondicionamiento",
+      "tag": "Rendimiento",
+      "summary": { "warmup": 8, "main": 30, "metabolic": 12, "cooldown": 7, "total": 57 },
+      "sections": [
+        {
+          "title": "Potencia",
+          "badge": "Explosivo",
+          "badgeStyle": "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+          "exercises": [
+            { "name": "Kettlebell swing", "volume": "5 × 10", "rest": "60s", "science": "La extensión rápida de cadera entrena potencia con un patrón de bisagra sencillo.", "tip": "Impulsa con la cadera; no levantes la pesa con los brazos.", "isKey": true, "keyBadge": "potencia", "loggable": true, "sets": 5 },
+            { "name": "Lanzamiento de balón medicinal", "volume": "4 × 6", "rest": "60s", "science": "Los lanzamientos permiten aplicar fuerza máxima con baja carga excéntrica.", "tip": "Cada repetición debe ser rápida y técnicamente limpia.", "loggable": true, "sets": 4 }
+          ]
+        },
+        {
+          "title": "Finisher",
+          "badge": "Condición",
+          "badgeStyle": "bg-red-500/10 text-red-400 border border-red-500/20",
+          "note": "Completa las rondas a ritmo sostenible. La calidad del movimiento es prioritaria frente a la velocidad.",
+          "exercises": [
+            { "name": "Circuito: remo + step-up + farmer hold", "volume": "4 rondas", "rest": "90s entre rondas", "science": "Un circuito mixto eleva la capacidad de trabajo sin convertir la sesión en cardio de alto impacto.", "tip": "Mantén una intensidad de 7/10 y termina con margen.", "loggable": true, "sets": 4 }
+          ]
+        },
+        {
+          "title": "Vuelta a la calma",
+          "badge": "Recuperación",
+          "badgeStyle": "bg-blue-500/10 text-blue-400 border border-blue-500/20",
+          "exercises": [
+            { "name": "Respiración nasal", "volume": "3 min", "description": "Baja progresivamente la frecuencia cardíaca." },
+            { "name": "Movilidad global", "volume": "4 min", "description": "Recorre cadera, tobillo, hombros y columna." }
+          ]
+        }
+      ]
+    }
+  ],
+  "weeklySchedule": [
+    { "day": "Lunes", "session": "A", "dayId": "dia-a", "name": "Sentadilla + Empuje", "color": "#F59E0B" },
+    { "day": "Martes", "session": "Descanso", "name": "Movilidad suave", "color": "#3F3F46" },
+    { "day": "Miércoles", "session": "B", "dayId": "dia-b", "name": "Bisagra + Jalón", "color": "#F59E0B" },
+    { "day": "Jueves", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" },
+    { "day": "Viernes", "session": "C", "dayId": "dia-c", "name": "Unilateral + Core", "color": "#F59E0B" },
+    { "day": "Sábado", "session": "D", "dayId": "dia-d", "name": "Potencia + Acondicionamiento", "color": "#F59E0B" },
+    { "day": "Domingo", "session": "Descanso", "name": "Recuperación completa", "color": "#3F3F46" }
+  ],
+  "scienceFactors": [
+    { "element": "Progresión de fuerza", "reason": "Los principales levantamientos usan pocas repeticiones y descansos largos para priorizar producción de fuerza." },
+    { "element": "Estabilidad real", "reason": "El trabajo unilateral y anti-rotación convierte la fuerza en control útil para el movimiento." },
+    { "element": "Potencia separada", "reason": "El día D concentra movimientos explosivos y acondicionamiento para proteger la calidad de los días pesados." }
+  ]
+}

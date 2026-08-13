@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { ChevronDown, ChevronUp, AlertCircle, Check, Activity } from 'lucide-react';
 import type { Exercise } from '../types';
 
@@ -10,7 +10,7 @@ interface ExerciseCardProps {
   onToggleCompleted: (exName: string) => void;
 }
 
-export default function ExerciseCard({ exercise, isCompleted, completedSets = [], onToggleSet, onToggleCompleted }: ExerciseCardProps) {
+function ExerciseCard({ exercise, isCompleted, completedSets = [], onToggleSet, onToggleCompleted }: ExerciseCardProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSetClick = (setIdx: number) => {
@@ -144,3 +144,5 @@ export default function ExerciseCard({ exercise, isCompleted, completedSets = []
     </div>
   );
 }
+
+export default memo(ExerciseCard);

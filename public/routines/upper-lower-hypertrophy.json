@@ -1,0 +1,172 @@
+{
+  "id": "upper-lower-hypertrophy",
+  "name": "Rutina N°2 — Upper/Lower",
+  "description": "Split de tren superior e inferior enfocado en hipertrofia muscular con progresión de carga",
+  "author": "Equipo GLOW",
+  "level": "Intermedio",
+  "frequency": "4 días/semana",
+  "goal": "Hipertrofia General",
+  "accentColor": "#10B981",
+  "days": [
+    {
+      "id": "dia-a",
+      "name": "Día A",
+      "subtitle": "Tren Superior — Empuje",
+      "tag": "Hipertrofia",
+      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Rotaciones de brazos", "volume": "2 × 20", "description": "Activación del hombro" },
+            { "name": "Press militar con banda", "volume": "2 × 15", "description": "Activación de deltoides" }
+          ]
+        },
+        {
+          "title": "Trabajo Principal",
+          "badge": "Main",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "exercises": [
+            { "name": "Press banca", "volume": "4 × 8", "rest": "120s", "description": "Press con barra", "science": "Trabaja pectoral mayor", "tip": "Pies firmes", "loggable": true, "sets": 4 },
+            { "name": "Press inclinado", "volume": "3 × 10", "rest": "120s", "description": "Press inclinado con barra", "loggable": true, "sets": 3 },
+            { "name": "Fondos", "volume": "3 × 12", "rest": "90s", "description": "Fondos en paralelas", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Enfriamiento",
+          "badge": "Cooldown",
+          "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
+          "exercises": [
+            { "name": "Estiramiento de pecho", "volume": "2 × 30s", "description": "Mantén posición" },
+            { "name": "Estiramiento de tríceps", "volume": "2 × 30s", "description": "Mantén posición" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-b",
+      "name": "Día B",
+      "subtitle": "Tren Inferior",
+      "tag": "Hipertrofia",
+      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Caminata lateral con banda", "volume": "2 × 30s", "description": "Activación glúteos" },
+            { "name": "Sentadilla sin peso", "volume": "2 × 15", "description": "Calienta cuádriceps" }
+          ]
+        },
+        {
+          "title": "Trabajo Principal",
+          "badge": "Main",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "exercises": [
+            { "name": "Sentadilla trasera", "volume": "4 × 8", "rest": "120s", "description": "Sentadilla profunda con barra", "science": "Alta carga para hipertrofia", "loggable": true, "sets": 4 },
+            { "name": "Prensa horizontal", "volume": "3 × 12", "rest": "90s", "description": "Enfoca cuádriceps y glúteos", "loggable": true, "sets": 3 },
+            { "name": "Curl femoral tumbado", "volume": "3 × 12", "rest": "60s", "description": "Aislado isquiotibiales", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Enfriamiento",
+          "badge": "Cooldown",
+          "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
+          "exercises": [
+            { "name": "Estiramiento de cuádriceps", "volume": "2 × 30s", "description": "Mantén postura" },
+            { "name": "Foam roll de glúteos", "volume": "2 × 60s", "description": "Masaje suave" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-c",
+      "name": "Día C",
+      "subtitle": "Tren Superior — Jalón",
+      "tag": "Hipertrofia",
+      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Band pull‑apart", "volume": "2 × 20", "description": "Activación espalda alta" },
+            { "name": "Rotaciones externas con banda", "volume": "2 × 15", "description": "Calienta hombros" }
+          ]
+        },
+        {
+          "title": "Trabajo Principal",
+          "badge": "Main",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "exercises": [
+            { "name": "Remo con barra", "volume": "4 × 8", "rest": "120s", "description": "Remo pendular", "science": "Activación dorsal", "tip": "Espalda neutra", "loggable": true, "sets": 4 },
+            { "name": "Dominadas", "volume": "3 × 8", "rest": "90s", "description": "Dominadas con peso opcional", "loggable": true, "sets": 3 },
+            { "name": "Curl bíceps con barra", "volume": "3 × 10", "rest": "90s", "description": "Curl barra", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Enfriamiento",
+          "badge": "Cooldown",
+          "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
+          "exercises": [
+            { "name": "Estiramiento de dorsal", "volume": "2 × 30s", "description": "Alarga la espalda" },
+            { "name": "Estiramiento de bíceps", "volume": "2 × 30s", "description": "Mantén posición" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-d",
+      "name": "Día D",
+      "subtitle": "Full Body",
+      "tag": "Hipertrofia",
+      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "sections": [
+        {
+          "title": "Calentamiento",
+          "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "name": "Burpees", "volume": "2 × 10", "description": "Activación general" }
+          ]
+        },
+        {
+          "title": "Trabajo Principal",
+          "badge": "Main",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "exercises": [
+            { "name": "Peso muerto", "volume": "4 × 6", "rest": "150s", "description": "Peso muerto convencional", "science": "Desarrolla cadena posterior", "tip": "Barra cerca del cuerpo", "loggable": true, "sets": 4 },
+            { "name": "Press inclinado", "volume": "3 × 10", "rest": "120s", "description": "Press con barra en banco inclinado", "loggable": true, "sets": 3 },
+            { "name": "Dominadas", "volume": "3 × 8", "rest": "90s", "description": "Dominadas con peso opcional", "loggable": true, "sets": 3 }
+          ]
+        },
+        {
+          "title": "Enfriamiento",
+          "badge": "Cooldown",
+          "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
+          "exercises": [
+            { "name": "Estiramiento de cadena posterior", "volume": "2 × 30s", "description": "Mantén posición" },
+            { "name": "Foam roll completo", "volume": "2 × 60s", "description": "Masaje general" }
+          ]
+        }
+      ]
+    }
+  ],
+  "weeklySchedule": [
+    { "day": "Lunes", "session": "A", "name": "Tren Superior", "color": "#10B981" },
+    { "day": "Martes", "session": "B", "name": "Tren Inferior", "color": "#10B981" },
+    { "day": "Miércoles", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" },
+    { "day": "Jueves", "session": "C", "name": "Tren Superior", "color": "#10B981" },
+    { "day": "Viernes", "session": "D", "name": "Tren Inferior", "color": "#10B981" },
+    { "day": "Sábado", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" },
+    { "day": "Domingo", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" }
+  ],
+  "scienceFactors": [
+    { "element": "Hipertrofia", "reason": "Volumen moderado‑alto (8‑12) y carga del 70‑80% 1RM" },
+    { "element": "Activación", "reason": "Ejercicios compuestos y aislados con rango completo" }
+  ]
+}

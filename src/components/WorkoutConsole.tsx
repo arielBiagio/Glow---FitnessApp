@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { workoutData } from '../data/workoutData';
+import React, { useEffect, useMemo, useRef } from 'react';
 import ExerciseCard from './ExerciseCard';
 import { Clock, Info, RotateCcw } from 'lucide-react';
 import gsap from 'gsap';
-import type { CompletedMap, SetsMap } from '../types';
+import type { CompletedMap, SetsMap, WorkoutDay } from '../types';
 
 interface WorkoutConsoleProps {
   activeDayId: string;
+  days: WorkoutDay[];
   completedExercises: CompletedMap;
   completedSets: SetsMap;
   onToggleSet: (exName: string, setIdx: number) => void;
@@ -16,16 +16,19 @@ interface WorkoutConsoleProps {
 
 export default function WorkoutConsole({
   activeDayId,
+  days,
   completedExercises,
   completedSets,
   onToggleSet,
   onToggleCompleted,
   onClearDay,
 }: WorkoutConsoleProps) {
-  const activeDay = workoutData.find(d => d.id === activeDayId) || workoutData[0];
+  const activeDay = days.find((day) => day.id === activeDayId) || days[0];
   const progressCircleRef = useRef<SVGCircleElement>(null);
-
-  const allExercises = activeDay.sections.flatMap(s => s.exercises);
+  const allExercises = useMemo(
+    () => activeDay?.sections.flatMap((section) => section.exercises) ?? [],
+    [activeDay],
+  );
   const totalExercises = allExercises.length;
 
   const dayCompletedMap = completedExercises[activeDayId] || {};
@@ -52,6 +55,8 @@ export default function WorkoutConsole({
       { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', duration: 0.45, ease: 'power3.out' }
     );
   }, [activeDayId]);
+
+  if (!activeDay) return null;
 
   return (
     <div id="console-board" className="flex flex-col space-y-6">
@@ -127,13 +132,13 @@ export default function WorkoutConsole({
             )}
 
             <div className="space-y-3">
-              {section.exercises.map((exercise, exIdx) => {
+              {section.exercises.map((exercise) => {
                 const exCompleted = dayCompletedMap[exercise.name] || false;
                 const exSets = completedSets[activeDayId]?.[exercise.name] || [];
 
                 return (
                   <ExerciseCard
-                    key={exIdx}
+                    key={exercise.name}
                     exercise={exercise}
                     isCompleted={exCompleted}
                     completedSets={exSets}
