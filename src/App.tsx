@@ -66,8 +66,8 @@ export default function App() {
 
   useEffect(() => {
     gsap.fromTo('.app-shell',
-      { opacity: 0, scale: 0.98 },
-      { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }
+      { opacity: 0 },
+      { opacity: 1, duration: 0.8, ease: 'power3.out' }
     );
   }, []);
 
@@ -123,9 +123,9 @@ export default function App() {
   };
 
   return (
-    <div className="w-full h-full min-h-screen bg-[#030307] flex items-center justify-center select-none">
+    <div className="app-viewport w-full h-full bg-[#07070E] md:bg-[#030307] flex items-center justify-center select-none">
 
-      <div className="app-shell w-full max-w-md h-dvh h-screen bg-[#07070E] flex flex-col relative md:border-x md:border-white/5 md:shadow-2xl overflow-hidden">
+      <div className="app-shell app-shell-height w-full max-w-md bg-[#07070E] flex flex-col relative md:border-x md:border-white/5 md:shadow-2xl overflow-hidden">
 
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 rounded-full bg-plasma/20 blur-[85px] pointer-events-none"></div>
         <div className="absolute bottom-20 right-[-10%] w-64 h-64 rounded-full bg-emerald-500/10 blur-[80px] pointer-events-none"></div>

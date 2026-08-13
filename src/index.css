@@ -23,14 +23,52 @@
     margin: 0;
     padding: 0;
     width: 100%;
+    min-height: 100%;
     height: 100%;
     overflow: hidden;
   }
 
   #root {
     width: 100%;
+    min-height: 100%;
     height: 100%;
     overflow: hidden;
+  }
+
+  .app-viewport,
+  .app-shell-height {
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  .app-viewport {
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+  }
+
+  .app-shell-height {
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+  }
+
+  @supports (-webkit-touch-callout: none) {
+    html {
+      min-height: -webkit-fill-available;
+    }
+
+    body,
+    #root {
+      min-height: -webkit-fill-available;
+    }
+
+    .app-viewport,
+    .app-shell-height {
+      min-height: -webkit-fill-available;
+    }
   }
 
   /* Custom Scrollbars */

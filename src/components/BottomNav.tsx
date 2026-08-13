@@ -24,7 +24,7 @@ export default function BottomNav({ days, activeTab, onSelectTab }: BottomNavPro
   const tabWidth = 100 / tabs.length;
 
   return (
-    <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-3 right-3 z-30 max-w-[calc(448px-24px)] mx-auto">
+    <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-3 right-3 z-30 max-w-[calc(448px-24px)] mx-auto">
       <div
         className="relative rounded-[2.25rem] overflow-hidden"
         style={{
