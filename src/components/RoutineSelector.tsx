@@ -68,7 +68,7 @@ export default function RoutineSelector({
         </div>
 
         <div className="flex-1 min-w-0">
-          <span className="block text-[9px] font-mono uppercase tracking-[0.18em] text-zinc-500 mb-1">
+          <span className="block text-[9px] font-mono uppercase tracking-[0.18em] text-zinc-400 mb-1">
             Programa activo
           </span>
 
@@ -137,9 +137,9 @@ export default function RoutineSelector({
       </div>
 
       {selectedRoutine && (
-        <div className="flex items-center gap-2 mt-2 text-[9px] font-mono text-zinc-500 uppercase tracking-wider">
+        <div className="flex items-center gap-2 mt-2 text-[9px] font-mono text-zinc-400 uppercase tracking-wider">
           <span>{selectedRoutine.goal}</span>
-          <span className="text-zinc-700">·</span>
+          <span className="text-zinc-600">·</span>
           <span>{selectedRoutine.frequency}</span>
           {loading && <span className="text-plasma animate-pulse">Cargando…</span>}
         </div>

@@ -34,7 +34,7 @@ export default function App() {
     handleSelectTab,
   } = useWorkoutProgress(selectedRoutine);
 
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLElement>(null);
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
 
@@ -132,7 +132,7 @@ export default function App() {
         <div className="absolute top-[35%] left-[-20%] w-56 h-56 rounded-full bg-[#7B61FF]/15 blur-[75px] pointer-events-none"></div>
 
         {/* Top Navbar with iOS Safe Area Inset Support */}
-        <div className="bg-[#0A0A14]/85 backdrop-blur-md border-b border-white/5 px-5 pt-[calc(env(safe-area-inset-top,0px)+12px)] pb-3 flex items-center justify-between select-none z-10">
+        <header className="bg-[#0A0A14]/85 backdrop-blur-md border-b border-white/5 px-5 pt-[calc(env(safe-area-inset-top,0px)+12px)] pb-3 flex items-center justify-between select-none z-10">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-md bg-plasma/10 border border-plasma/30 flex items-center justify-center">
               <Activity className="w-3.5 h-3.5 text-plasma animate-pulse" />
@@ -142,11 +142,11 @@ export default function App() {
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-zinc-950 border border-zinc-900 rounded-full px-2.5 py-1 text-[8px] tracking-widest text-zinc-500 font-mono">
+          <div className="flex items-center gap-1.5 bg-zinc-950 border border-zinc-900 rounded-full px-2.5 py-1 text-[8px] tracking-widest text-zinc-400 font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             APP ACTIVE
           </div>
-        </div>
+        </header>
 
         {toastMessage && (
           <div
@@ -159,8 +159,10 @@ export default function App() {
           </div>
         )}
 
-        <div
+        <main
           ref={scrollContainerRef}
+          id="main-content"
+          role="main"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           className="flex-1 overflow-y-auto px-4 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+110px)] hide-scrollbar relative z-10"
@@ -198,7 +200,7 @@ export default function App() {
               />
             )}
           </div>
-        </div>
+        </main>
 
         <BottomNav
           days={selectedRoutine?.days ?? []}

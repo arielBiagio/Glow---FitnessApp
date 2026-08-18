@@ -119,7 +119,7 @@ export default function WorkoutConsole({
               <h3 className="font-sans font-semibold text-xs text-zinc-400 uppercase tracking-wider">
                 {section.title}
               </h3>
-              <span className={`text-[8px] font-mono tracking-widest px-2 py-0.5 rounded-full ${section.badgeStyle || 'bg-zinc-900 text-zinc-500'}`}>
+              <span className={`text-[8px] font-mono tracking-widest px-2 py-0.5 rounded-full ${section.badgeStyle || 'bg-zinc-900 text-zinc-400'}`}>
                 {section.badge}
               </span>
             </div>

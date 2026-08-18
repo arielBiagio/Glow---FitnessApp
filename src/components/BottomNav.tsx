@@ -62,11 +62,11 @@ export default function BottomNav({ days, activeTab, onSelectTab }: BottomNavPro
                 style={{ transform: isActive ? 'scale(1.06)' : 'scale(1)', filter: isActive ? 'drop-shadow(0 0 4px rgba(123,97,255,0.4))' : 'none' }}
                 aria-label={`${tab.label} — ${tab.sub}${isActive ? ' (activo)' : ''}`}
               >
-                <Icon className="w-5 h-5 transition-colors duration-300" style={{ color: isActive ? '#A78BFA' : '#646470' }} strokeWidth={isActive ? 2.2 : 1.8} />
-                <span className="max-w-full truncate text-[9px] font-sans font-semibold tracking-wide mt-1 transition-colors duration-300" style={{ color: isActive ? '#C4B5FD' : '#858594' }}>
+                <Icon className="w-5 h-5 transition-colors duration-300" style={{ color: isActive ? '#A78BFA' : '#71717A' }} strokeWidth={isActive ? 2.2 : 1.8} />
+                <span className="max-w-full truncate text-[9px] font-sans font-semibold tracking-wide mt-1 transition-colors duration-300" style={{ color: isActive ? '#C4B5FD' : '#A1A1AA' }}>
                   {tab.label}
                 </span>
-                <span className="max-w-full truncate text-[6.5px] font-sans text-zinc-500 uppercase tracking-[0.12em] leading-none mt-0.5">
+                <span className="max-w-full truncate text-[6.5px] font-sans text-zinc-400 uppercase tracking-[0.12em] leading-none mt-0.5">
                   {tab.sub}
                 </span>
               </button>
