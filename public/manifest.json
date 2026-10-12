@@ -1,6 +1,6 @@
 {
-  "name": "GLOW Cele — Bio-Performance Tracker",
-  "short_name": "GLOW Cele",
+  "name": "GLOW — Bio-Performance Tracker",
+  "short_name": "GLOW",
   "description": "Rutina de entrenamiento y seguimiento de hipertrofia",
   "start_url": "/",
   "display": "standalone",

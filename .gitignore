@@ -11,6 +11,14 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+qa-artifacts/
+dist-qa-local/
+dist-qa-cloud/
 
 # Editor directories and files
 .vscode/*

@@ -1,15 +1,15 @@
-import React from 'react';
-import { Calendar, CheckCircle2, Zap, RefreshCw } from 'lucide-react';
+import { Calendar, CheckCircle2, Zap } from 'lucide-react';
 import type { ScienceFactor, WeeklyScheduleItem } from '../types';
+import type { WorkoutSession } from '../lib/workouts';
 
 interface WeeklyScheduleProps {
   weeklySchedule: WeeklyScheduleItem[];
   scienceFactors: ScienceFactor[];
   onSelectDay: (dayId: string) => void;
-  onClearProgress: () => void;
+  sessions: WorkoutSession[];
 }
 
-export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelectDay, onClearProgress }: WeeklyScheduleProps) {
+export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelectDay, sessions }: WeeklyScheduleProps) {
   return (
     <div className="flex flex-col space-y-6 pb-24">
 
@@ -28,6 +28,8 @@ export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelec
         <div className="space-y-2">
           {weeklySchedule.map((sched) => {
             const isDescanso = sched.session === "Descanso";
+            const daySessions = sessions.filter(item => item.dayId === sched.dayId);
+            const status = daySessions.some(item => item.status === 'completed') ? 'Completado' : daySessions.some(item => item.status === 'in_progress') ? 'En curso' : `Día ${sched.session}`;
 
             return (
               <div
@@ -67,7 +69,7 @@ export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelec
 
                 {!isDescanso ? (
                   <span className="font-mono text-[8px] tracking-widest bg-plasma/15 text-plasma border border-plasma/20 px-2 py-0.5 rounded uppercase font-semibold">
-                    Día {sched.session}
+                    {status}
                   </span>
                 ) : (
                   <span className="font-mono text-[8px] tracking-widest bg-zinc-900/60 text-zinc-600 px-2 py-0.5 rounded uppercase font-semibold">
@@ -107,22 +109,7 @@ export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelec
         </div>
       </div>
 
-      <div className="p-4 rounded-[1.5rem] bg-rose-500/5 border border-rose-500/10 flex flex-col items-center justify-center gap-2 text-center">
-        <span className="text-[10px] font-mono text-rose-400 font-bold uppercase tracking-wider">
-          Zona de Control
-        </span>
-        <p className="text-[11px] text-zinc-400 max-w-xs font-sans">
-          Reiniciar todo el historial de ejercicios completados y series registradas.
-        </p>
-        <button
-          onClick={onClearProgress}
-          className="mt-1 flex items-center gap-1.5 px-4 py-2 bg-rose-950/20 hover:bg-rose-950/40 border border-rose-500/20 text-[10px] font-mono rounded-xl text-rose-400 transition-all duration-300"
-          aria-label="Reiniciar todo el progreso semanal"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          Reiniciar Progreso Semanal
-        </button>
-      </div>
+      <p className="text-xs text-zinc-400 text-center">El avance se guarda automáticamente al entrenar.</p>
 
     </div>
   );

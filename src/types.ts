@@ -1,4 +1,5 @@
 export interface Exercise {
+  id: string;
   name: string;
   volume: string;
   description?: string;
@@ -12,6 +13,7 @@ export interface Exercise {
 }
 
 export interface Section {
+  id: string;
   title: string;
   badge: string;
   badgeStyle: string;
@@ -48,6 +50,7 @@ export interface RoutineManifestEntry {
 }
 
 export interface Routine {
+  version: number;
   id: string;
   name: string;
   description: string;
@@ -62,6 +65,7 @@ export interface Routine {
 }
 
 export interface WeeklyScheduleItem {
+  weekday: number;
   day: string;
   session: string;
   name: string;

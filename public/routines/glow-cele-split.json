@@ -13,16 +13,32 @@
       "name": "Día A",
       "subtitle": "Glúteos + Core",
       "tag": "Hipertrofia",
-      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "summary": {
+        "warmup": 8,
+        "main": 45,
+        "cooldown": 8,
+        "total": 61
+      },
       "sections": [
         {
           "title": "Calentamiento",
           "badge": "Warmup",
           "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
           "exercises": [
-            { "name": "Caminata lateral con banda", "volume": "2 × 30s", "description": "Activación glúteos medio" },
-            { "name": "Hip Thrust con barra vacía", "volume": "2 × 15", "description": "Activación glúteos" }
-          ]
+            {
+              "name": "Caminata lateral con banda",
+              "volume": "2 × 30s",
+              "description": "Activación glúteos medio",
+              "id": "dia-a-section-1-exercise-1"
+            },
+            {
+              "name": "Hip Thrust con barra vacía",
+              "volume": "2 × 15",
+              "description": "Activación glúteos",
+              "id": "dia-a-section-1-exercise-2"
+            }
+          ],
+          "id": "dia-a-section-1"
         },
         {
           "title": "Trabajo Principal",
@@ -39,7 +55,8 @@
               "isKey": true,
               "keyBadge": "Key",
               "loggable": true,
-              "sets": 4
+              "sets": 4,
+              "id": "dia-a-section-2-exercise-1"
             },
             {
               "name": "Sentadilla Búlgar",
@@ -49,7 +66,8 @@
               "science": "Enfoca glúteos y cuádriceps",
               "tip": "Mantén el torso erguido",
               "loggable": true,
-              "sets": 3
+              "sets": 3,
+              "id": "dia-a-section-2-exercise-2"
             },
             {
               "name": "Elevación de pelvis en máquina",
@@ -57,18 +75,31 @@
               "rest": "60s",
               "description": "Hip abductor machine",
               "loggable": true,
-              "sets": 3
+              "sets": 3,
+              "id": "dia-a-section-2-exercise-3"
             }
-          ]
+          ],
+          "id": "dia-a-section-2"
         },
         {
           "title": "Enfriamiento",
           "badge": "Cooldown",
           "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
           "exercises": [
-            { "name": "Estiramiento de glúteos", "volume": "2 × 30s", "description": "Mantén la postura 30 seg." },
-            { "name": "Foam roll de isquiotibiales", "volume": "2 × 60s", "description": "Masaje suave" }
-          ]
+            {
+              "name": "Estiramiento de glúteos",
+              "volume": "2 × 30s",
+              "description": "Mantén la postura 30 seg.",
+              "id": "dia-a-section-3-exercise-1"
+            },
+            {
+              "name": "Foam roll de isquiotibiales",
+              "volume": "2 × 60s",
+              "description": "Masaje suave",
+              "id": "dia-a-section-3-exercise-2"
+            }
+          ],
+          "id": "dia-a-section-3"
         }
       ]
     },
@@ -77,16 +108,32 @@
       "name": "Día B",
       "subtitle": "Pierna + Core",
       "tag": "Hipertrofia",
-      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "summary": {
+        "warmup": 8,
+        "main": 45,
+        "cooldown": 8,
+        "total": 61
+      },
       "sections": [
         {
           "title": "Calentamiento",
           "badge": "Warmup",
           "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
           "exercises": [
-            { "name": "Jumping jacks", "volume": "2 × 30", "description": "Activación general" },
-            { "name": "Sentadilla aire", "volume": "2 × 15", "description": "Calienta cuádriceps" }
-          ]
+            {
+              "name": "Jumping jacks",
+              "volume": "2 × 30",
+              "description": "Activación general",
+              "id": "dia-b-section-1-exercise-1"
+            },
+            {
+              "name": "Sentadilla aire",
+              "volume": "2 × 15",
+              "description": "Calienta cuádriceps",
+              "id": "dia-b-section-1-exercise-2"
+            }
+          ],
+          "id": "dia-b-section-1"
         },
         {
           "title": "Trabajo Principal",
@@ -101,7 +148,8 @@
               "science": "Alta carga para hipertrofia",
               "tip": "Desciende al menos hasta paralelo",
               "loggable": true,
-              "sets": 4
+              "sets": 4,
+              "id": "dia-b-section-2-exercise-1"
             },
             {
               "name": "Prensa horizontal",
@@ -109,7 +157,8 @@
               "rest": "90s",
               "description": "Enfoca cuádriceps y glúteos",
               "loggable": true,
-              "sets": 3
+              "sets": 3,
+              "id": "dia-b-section-2-exercise-2"
             },
             {
               "name": "Curl femoral tumbado",
@@ -117,18 +166,31 @@
               "rest": "60s",
               "description": "Aislado isquiotibiales",
               "loggable": true,
-              "sets": 3
+              "sets": 3,
+              "id": "dia-b-section-2-exercise-3"
             }
-          ]
+          ],
+          "id": "dia-b-section-2"
         },
         {
           "title": "Enfriamiento",
           "badge": "Cooldown",
           "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
           "exercises": [
-            { "name": "Estiramiento de cuádriceps", "volume": "2 × 30s", "description": "Mantén la postura" },
-            { "name": "Foam roll de glúteos", "volume": "2 × 60s", "description": "Masaje suave" }
-          ]
+            {
+              "name": "Estiramiento de cuádriceps",
+              "volume": "2 × 30s",
+              "description": "Mantén la postura",
+              "id": "dia-b-section-3-exercise-1"
+            },
+            {
+              "name": "Foam roll de glúteos",
+              "volume": "2 × 60s",
+              "description": "Masaje suave",
+              "id": "dia-b-section-3-exercise-2"
+            }
+          ],
+          "id": "dia-b-section-3"
         }
       ]
     },
@@ -137,16 +199,32 @@
       "name": "Día C",
       "subtitle": "Upper Body",
       "tag": "Hipertrofia",
-      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "summary": {
+        "warmup": 8,
+        "main": 45,
+        "cooldown": 8,
+        "total": 61
+      },
       "sections": [
         {
           "title": "Calentamiento",
           "badge": "Warmup",
           "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
           "exercises": [
-            { "name": "Band pull‑apart", "volume": "2 × 20", "description": "Activación espalda alta" },
-            { "name": "Rotaciones externas con banda", "volume": "2 × 15", "description": "Calienta hombros" }
-          ]
+            {
+              "name": "Band pull‑apart",
+              "volume": "2 × 20",
+              "description": "Activación espalda alta",
+              "id": "dia-c-section-1-exercise-1"
+            },
+            {
+              "name": "Rotaciones externas con banda",
+              "volume": "2 × 15",
+              "description": "Calienta hombros",
+              "id": "dia-c-section-1-exercise-2"
+            }
+          ],
+          "id": "dia-c-section-1"
         },
         {
           "title": "Trabajo Principal",
@@ -161,7 +239,8 @@
               "science": "Trabaja pectoral mayor",
               "tip": "Mantén los pies firmes",
               "loggable": true,
-              "sets": 4
+              "sets": 4,
+              "id": "dia-c-section-2-exercise-1"
             },
             {
               "name": "Remo con barra",
@@ -171,7 +250,8 @@
               "science": "Activación dorsal",
               "tip": "Mantén la espalda neutra",
               "loggable": true,
-              "sets": 4
+              "sets": 4,
+              "id": "dia-c-section-2-exercise-2"
             },
             {
               "name": "Press militar",
@@ -179,18 +259,31 @@
               "rest": "90s",
               "description": "Hombros sobre cabeza",
               "loggable": true,
-              "sets": 3
+              "sets": 3,
+              "id": "dia-c-section-2-exercise-3"
             }
-          ]
+          ],
+          "id": "dia-c-section-2"
         },
         {
           "title": "Enfriamiento",
           "badge": "Cooldown",
           "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
           "exercises": [
-            { "name": "Estiramiento de pecho", "volume": "2 × 30s", "description": "Mantén la posición" },
-            { "name": "Estiramiento de dorsal", "volume": "2 × 30s", "description": "Alarga la espalda" }
-          ]
+            {
+              "name": "Estiramiento de pecho",
+              "volume": "2 × 30s",
+              "description": "Mantén la posición",
+              "id": "dia-c-section-3-exercise-1"
+            },
+            {
+              "name": "Estiramiento de dorsal",
+              "volume": "2 × 30s",
+              "description": "Alarga la espalda",
+              "id": "dia-c-section-3-exercise-2"
+            }
+          ],
+          "id": "dia-c-section-3"
         }
       ]
     },
@@ -199,15 +292,26 @@
       "name": "Día D",
       "subtitle": "Full Body",
       "tag": "Hipertrofia",
-      "summary": { "warmup": 8, "main": 45, "cooldown": 8, "total": 61 },
+      "summary": {
+        "warmup": 8,
+        "main": 45,
+        "cooldown": 8,
+        "total": 61
+      },
       "sections": [
         {
           "title": "Calentamiento",
           "badge": "Warmup",
           "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
           "exercises": [
-            { "name": "Burpees", "volume": "2 × 10", "description": "Activación general" }
-          ]
+            {
+              "name": "Burpees",
+              "volume": "2 × 10",
+              "description": "Activación general",
+              "id": "dia-d-section-1-exercise-1"
+            }
+          ],
+          "id": "dia-d-section-1"
         },
         {
           "title": "Trabajo Principal",
@@ -222,7 +326,8 @@
               "science": "Desarrolla cadena posterior",
               "tip": "Mantén la barra cerca del cuerpo",
               "loggable": true,
-              "sets": 4
+              "sets": 4,
+              "id": "dia-d-section-2-exercise-1"
             },
             {
               "name": "Press inclinado",
@@ -230,7 +335,8 @@
               "rest": "120s",
               "description": "Press con barra en banco inclinado",
               "loggable": true,
-              "sets": 3
+              "sets": 3,
+              "id": "dia-d-section-2-exercise-2"
             },
             {
               "name": "Dominadas",
@@ -238,33 +344,99 @@
               "rest": "90s",
               "description": "Dominadas con peso adicional opcional",
               "loggable": true,
-              "sets": 3
+              "sets": 3,
+              "id": "dia-d-section-2-exercise-3"
             }
-          ]
+          ],
+          "id": "dia-d-section-2"
         },
         {
           "title": "Enfriamiento",
           "badge": "Cooldown",
           "badgeStyle": "bg-blue/10 text-blue border border-blue/20",
           "exercises": [
-            { "name": "Estiramiento de cadena posterior", "volume": "2 × 30s", "description": "Mantén la posición" },
-            { "name": "Foam roll completo", "volume": "2 × 60s", "description": "Masaje general" }
-          ]
+            {
+              "name": "Estiramiento de cadena posterior",
+              "volume": "2 × 30s",
+              "description": "Mantén la posición",
+              "id": "dia-d-section-3-exercise-1"
+            },
+            {
+              "name": "Foam roll completo",
+              "volume": "2 × 60s",
+              "description": "Masaje general",
+              "id": "dia-d-section-3-exercise-2"
+            }
+          ],
+          "id": "dia-d-section-3"
         }
       ]
     }
   ],
   "weeklySchedule": [
-    { "day": "Lunes", "session": "A", "name": "Glúteos + Core", "color": "#7B61FF" },
-    { "day": "Martes", "session": "B", "name": "Pierna + Core", "color": "#7B61FF" },
-    { "day": "Miércoles", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" },
-    { "day": "Jueves", "session": "C", "name": "Upper Body", "color": "#7B61FF" },
-    { "day": "Viernes", "session": "D", "name": "Full Body", "color": "#7B61FF" },
-    { "day": "Sábado", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" },
-    { "day": "Domingo", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" }
+    {
+      "day": "Lunes",
+      "session": "A",
+      "name": "Glúteos + Core",
+      "color": "#7B61FF",
+      "weekday": 1,
+      "dayId": "dia-a"
+    },
+    {
+      "day": "Martes",
+      "session": "B",
+      "name": "Pierna + Core",
+      "color": "#7B61FF",
+      "weekday": 2,
+      "dayId": "dia-b"
+    },
+    {
+      "day": "Miércoles",
+      "session": "Descanso",
+      "name": "Recuperación",
+      "color": "#3F3F46",
+      "weekday": 3
+    },
+    {
+      "day": "Jueves",
+      "session": "C",
+      "name": "Upper Body",
+      "color": "#7B61FF",
+      "weekday": 4,
+      "dayId": "dia-c"
+    },
+    {
+      "day": "Viernes",
+      "session": "D",
+      "name": "Full Body",
+      "color": "#7B61FF",
+      "weekday": 5,
+      "dayId": "dia-d"
+    },
+    {
+      "day": "Sábado",
+      "session": "Descanso",
+      "name": "Recuperación",
+      "color": "#3F3F46",
+      "weekday": 6
+    },
+    {
+      "day": "Domingo",
+      "session": "Descanso",
+      "name": "Recuperación",
+      "color": "#3F3F46",
+      "weekday": 7
+    }
   ],
   "scienceFactors": [
-    { "element": "Hipertrofia", "reason": "Volumen moderado‑alto (8‑12) y carga del 70‑80% 1RM" },
-    { "element": "Activación glúteos", "reason": "Ejercicios aislados con alto rango de movimiento" }
-  ]
+    {
+      "element": "Hipertrofia",
+      "reason": "Volumen moderado‑alto (8‑12) y carga del 70‑80% 1RM"
+    },
+    {
+      "element": "Activación glúteos",
+      "reason": "Ejercicios aislados con alto rango de movimiento"
+    }
+  ],
+  "version": 1
 }

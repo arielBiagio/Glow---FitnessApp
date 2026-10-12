@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import ExerciseCard from './ExerciseCard';
 import { Clock, Info, RotateCcw } from 'lucide-react';
-import gsap from 'gsap';
 import type { CompletedMap, SetsMap, WorkoutDay } from '../types';
 
 interface WorkoutConsoleProps {
@@ -24,7 +23,6 @@ export default function WorkoutConsole({
   onClearDay,
 }: WorkoutConsoleProps) {
   const activeDay = days.find((day) => day.id === activeDayId) || days[0];
-  const progressCircleRef = useRef<SVGCircleElement>(null);
   const allExercises = useMemo(
     () => activeDay?.sections.flatMap((section) => section.exercises) ?? [],
     [activeDay],
@@ -32,29 +30,12 @@ export default function WorkoutConsole({
   const totalExercises = allExercises.length;
 
   const dayCompletedMap = completedExercises[activeDayId] || {};
-  const completedCount = allExercises.filter(e => dayCompletedMap[e.name]).length;
+  const completedCount = allExercises.filter(e => dayCompletedMap[e.id]).length;
   const percent = totalExercises > 0 ? Math.round((completedCount / totalExercises) * 100) : 0;
 
   const radius = 30;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
-
-  useEffect(() => {
-    if (progressCircleRef.current) {
-      gsap.to(progressCircleRef.current, {
-        strokeDashoffset,
-        duration: 0.6,
-        ease: 'power2.out'
-      });
-    }
-  }, [strokeDashoffset]);
-
-  useEffect(() => {
-    gsap.fromTo('#console-board',
-      { opacity: 0, x: 20, scale: 0.98, filter: 'blur(5px)' },
-      { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', duration: 0.45, ease: 'power3.out' }
-    );
-  }, [activeDayId]);
 
   if (!activeDay) return null;
 
@@ -65,8 +46,8 @@ export default function WorkoutConsole({
         <div className="absolute -left-12 -top-12 w-24 h-24 rounded-full bg-plasma/10 blur-2xl pointer-events-none"></div>
 
         <div>
-          <span className="text-[10px] font-mono tracking-widest text-[#7B61FF] uppercase font-bold">
-            Entrenamiento de Hoy
+          <span className="text-[10px] font-mono tracking-widest text-plasma-ink uppercase font-bold">
+            Entrenamiento del día
           </span>
           <h2 className="text-xl font-bold text-white tracking-tight mt-0.5">
             {activeDay.name} — {activeDay.subtitle}
@@ -92,7 +73,6 @@ export default function WorkoutConsole({
               strokeWidth="5"
             />
             <circle
-              ref={progressCircleRef}
               cx="40"
               cy="40"
               r={radius}
@@ -101,7 +81,7 @@ export default function WorkoutConsole({
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"
-              style={{ transition: 'stroke-dashoffset 0.3s ease' }}
+              style={{ transition: 'stroke-dashoffset 0.6s ease' }}
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
@@ -119,26 +99,30 @@ export default function WorkoutConsole({
               <h3 className="font-sans font-semibold text-xs text-zinc-400 uppercase tracking-wider">
                 {section.title}
               </h3>
-              <span className={`text-[8px] font-mono tracking-widest px-2 py-0.5 rounded-full ${section.badgeStyle || 'bg-zinc-900 text-zinc-400'}`}>
+              <span className={`text-[8px] font-mono tracking-widest px-2 py-0.5 rounded-full ${
+                ['Warmup', 'Main', 'Cooldown'].includes(section.badge)
+                  ? 'bg-plasma/10 text-plasma-ink border border-plasma/20'
+                  : section.badgeStyle || 'bg-zinc-900 text-zinc-400'
+              }`}>
                 {section.badge}
               </span>
             </div>
 
             {section.note && (
               <div className="p-3.5 rounded-2xl bg-[#7B61FF]/5 border border-[#7B61FF]/15 text-zinc-300 text-xs flex gap-2.5">
-                <Info className="w-4 h-4 text-plasma flex-shrink-0 mt-0.5" />
+                <Info className="w-4 h-4 text-plasma-ink flex-shrink-0 mt-0.5" />
                 <p className="leading-relaxed font-sans">{section.note}</p>
               </div>
             )}
 
             <div className="space-y-3">
               {section.exercises.map((exercise) => {
-                const exCompleted = dayCompletedMap[exercise.name] || false;
-                const exSets = completedSets[activeDayId]?.[exercise.name] || [];
+                const exCompleted = dayCompletedMap[exercise.id] || false;
+                const exSets = completedSets[activeDayId]?.[exercise.id] || [];
 
                 return (
                   <ExerciseCard
-                    key={exercise.name}
+                    key={exercise.id}
                     exercise={exercise}
                     isCompleted={exCompleted}
                     completedSets={exSets}
@@ -156,10 +140,10 @@ export default function WorkoutConsole({
             <button
               onClick={onClearDay}
               className="w-full py-3.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 hover:border-rose-500/40 text-xs font-mono rounded-2xl text-rose-400 flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.98]"
-              aria-label="Reiniciar progreso del día de hoy"
+              aria-label="Reiniciar progreso de esta sesión"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              Reiniciar Progreso de Hoy
+              Reiniciar esta sesión
             </button>
           </div>
         )}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Routine, RoutineManifestEntry } from '../types';
+import { validateRoutine } from '../lib/workouts';
 
 interface RoutineManifestResponse {
   routines?: RoutineManifestEntry[];
@@ -38,7 +39,7 @@ export function useWorkoutRoutines(): UseWorkoutRoutinesReturn {
   const loadRoutine = useCallback(async (entry: RoutineManifestEntry, signal: AbortSignal) => {
     let routine = routineCacheRef.current.get(entry.id);
     if (!routine) {
-      routine = await fetchJson<Routine>(entry.file, signal);
+      routine = validateRoutine(await fetchJson<Routine>(entry.file, signal));
       routineCacheRef.current.set(entry.id, routine);
     }
     if (signal.aborted) return;
