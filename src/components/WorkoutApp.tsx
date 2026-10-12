@@ -120,7 +120,7 @@ export default function WorkoutApp({ auth, onLogin }: { auth: ReturnType<typeof 
   };
 
   return (
-    <div className="app-viewport w-full h-full bg-[#07070E] md:bg-[#030307] flex items-center justify-center select-none">
+    <div className="app-viewport w-full bg-[#07070E] md:bg-[#030307] flex items-center justify-center select-none">
 
       <div className="app-shell app-shell-height w-full max-w-md bg-[#07070E] flex flex-col relative md:border-x md:border-white/5 md:shadow-2xl overflow-hidden">
 
@@ -159,7 +159,7 @@ export default function WorkoutApp({ auth, onLogin }: { auth: ReturnType<typeof 
           role="main"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="flex-1 overflow-y-auto px-4 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+110px)] hide-scrollbar relative z-10"
+          className="flex-1 min-h-0 overflow-y-auto px-4 pt-4 pb-[calc(env(safe-area-inset-bottom,0px)+110px)] hide-scrollbar relative z-10"
         >
           {auth.error && <div role="alert" className="rounded-xl border border-rose-400/20 bg-rose-500/5 p-3 mb-4 text-xs text-rose-300">
             <p>{auth.error}</p>

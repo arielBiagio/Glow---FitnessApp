@@ -73,7 +73,8 @@
     height: 100dvh;
   }
 
-  @supports (-webkit-touch-callout: none) {
+  /* Legacy Safari only: do not override dynamic viewport sizing on modern iOS. */
+  @supports (-webkit-touch-callout: none) and (not (height: 100dvh)) {
     html {
       min-height: -webkit-fill-available;
     }
@@ -138,6 +139,17 @@
 
   .app-shell { animation: app-shell-in 0.5s ease-out backwards; }
   @keyframes app-shell-in { from { opacity: 0; } to { opacity: 1; } }
+
+  .bottom-nav-position {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  }
+
+  /* Installed app: keep the pill close to the bottom instead of adding another safe-area gap. */
+  @media (display-mode: standalone), (display-mode: fullscreen) {
+    .bottom-nav-position {
+      bottom: 2px;
+    }
+  }
 
   .liquid-nav {
     position: relative;

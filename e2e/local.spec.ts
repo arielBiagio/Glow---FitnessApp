@@ -185,6 +185,29 @@ test('selector de rutina permite navegación con flechas y devuelve el foco', as
   await expect(selector).toHaveText(/Rutina N°2/);
 });
 
+test('navbar pegada al viewport aunque el contenedor mida menos, respetando el área segura', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enterLocal(page);
+  // Synthetic iOS geometry, not emulation of the physical Safari/PWA chrome.
+  await page.addStyleTag({ content: '#root { height: calc(100% - 59px); min-height: 0; }' });
+  expect(await page.locator('.app-viewport').evaluate(element => element.getBoundingClientRect().height)).toBe(852);
+  await page.addStyleTag({ content: '.app-shell-height { height: calc(100dvh - 59px); min-height: 0; }' });
+  const nav = page.getByRole('navigation');
+  // Synthetic total bottom inset: desktop engines report zero native safe area.
+  await nav.locator('..').evaluate(element => (element as HTMLElement).style.bottom = '46px');
+  for (const height of [852, 740, 852]) {
+    await page.setViewportSize({ width: 393, height });
+    const box = await nav.boundingBox();
+    expect(Math.round(height - box!.y - box!.height)).toBe(46);
+    expect(box!.height).toBeLessThanOrEqual(68);
+    expect(await nav.getByRole('button').first().evaluate(element => element.getBoundingClientRect().height)).toBeGreaterThanOrEqual(44);
+    await page.locator('#main-content').evaluate(element => element.scrollTop = element.scrollHeight);
+    const scrolled = await nav.boundingBox();
+    expect(Math.round(height - scrolled!.y - scrolled!.height)).toBe(46);
+  }
+  await page.screenshot({ path: `qa-artifacts/navbar-safe-area-${testInfo.project.name}.png`, animations: 'disabled' });
+});
+
 test('el flujo nuevo ignora las marcas anteriores y cambia de semana automáticamente', async ({ page }) => {
   await page.clock.setSystemTime(new Date('2026-10-12T12:00:00Z'));
   await page.addInitScript(() => localStorage.setItem('glow-split:glow-cele-split:completed-exercises', JSON.stringify({ 'dia-a': { 'Caminata lateral con banda': true } })));

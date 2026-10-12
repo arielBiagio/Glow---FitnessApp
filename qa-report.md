@@ -6,7 +6,38 @@
 **Entorno:** Windows, Node 24.14.1, Lighthouse 13.5.0, Chrome headless y WebKit 27.2. Builds de producción separados para modo local y nube simulada. Base SQL efímera con PGlite. Viewports 393 × 852, 320 × 640 y 1440 × 900.
 **Seguridad operativa:** no se inició sesión con credenciales reales, no se modificó Supabase real, no se cambió `.env.local`, no se hizo commit ni push. La aplicación del usuario en el puerto 5173 se conservó.
 
-## Resumen
+## Revalidación: navbar inferior (2026-10-12)
+
+**Actualización posterior a esas pruebas:** tras una segunda captura del iPhone, el margen de la navbar en modo instalado (`standalone`/`fullscreen`) se cambió a 4 px y luego a 2 px a pedido del usuario, sin sumar `safe-area-inset-bottom`. Safari normal conserva el inset + 8 px. Por pedido del usuario no se ejecutó QA de estos últimos ajustes; solo se generó el build. Los resultados siguientes corresponden al ajuste anterior y no certifican esta última regla.
+
+**Aprobación visual posterior:** el usuario confirmó que la posición final de 2 px está bien y autorizó el commit y push. Esta confirmación no equivale a una nueva ejecución de QA automatizado.
+
+**Veredicto: listo para probar en el iPhone.** Ajuste local verificado; no se confirma aquí el comportamiento del Safari/PWA del dispositivo físico.
+
+### Arreglados
+
+- **[S3] Navbar demasiado elevada cuando el contenedor es más corto que el viewport.** La captura aportada muestra una separación excesiva. Una fixture geométrica local reproduce el anclaje incorrecto, no el fallo interno específico de iOS: al reducir el contenedor 59 px, el margen medido pasa de los 46 px solicitados a 76 px. El test falla en Chrome y WebKit antes del cambio y pasa en ambos después.
+- `BottomNav.tsx`: anclaje `fixed` al viewport, en lugar de `absolute` al contenedor; margen real `env(safe-area-inset-bottom) + 8px`. Se conservan el estilo glass y los botones de 56 px.
+- `WorkoutApp.tsx`: eliminado `h-full`, que competía con las unidades de viewport; añadido `min-h-0` al panel desplazable.
+- `index.css`: el fallback `-webkit-fill-available` ahora se aplica únicamente al Safari antiguo sin soporte de `dvh`, evitando sobrescribir el tamaño moderno del viewport.
+
+### Comprobaciones ejecutadas
+
+- Antes: typecheck, lint, build y 31 pruebas unitarias/SQL correctos; 16 E2E existentes de Chrome/WebKit correctos y las dos ejecuciones de la nueva regresión fallidas, como se esperaba.
+- Después: typecheck, lint, build y **31/31 pruebas unitarias/SQL** correctos; **25/25 E2E** correctos (9 Chrome local, 9 WebKit local, 7 nube simulada), incluidos los controles axe existentes.
+- Nueva regresión: contenedor reducido, margen inferior sintético de 46 px, cambios de altura 852 → 740 → 852, scroll y tamaño táctil mínimo. Es una simulación de geometría, no una emulación de los insets físicos de un iPhone.
+- Evidencia: [antes](qa-artifacts/navbar-before-results.json), [después](qa-artifacts/playwright-results.json), [captura WebKit](qa-artifacts/navbar-safe-area-webkit-production.png).
+- `dist/` recompilado con la configuración pública existente. ZIP nuevo: `glow-netlify-navbar-2026-10-12-184939.zip`. No se cambiaron credenciales, datos de Supabase, dependencias, ni se hizo commit/push.
+
+### Pendientes / límites
+
+- Comprobar el nuevo despliegue en Safari y en la app instalada del iPhone. No se conoce la versión exacta de iOS de la captura ni se inspeccionó el Netlify desplegado.
+- WebKit documenta [problemas de standalone con `viewport-fit=cover` y `-webkit-fill-available`](https://bugs.webkit.org/show_bug.cgi?id=237961). Es contexto de compatibilidad; no prueba que ese bug sea la causa exacta en este teléfono.
+- No se repitió Lighthouse por este ajuste localizado de posición. Los resultados de rendimiento que siguen corresponden a la auditoría de optimización anterior.
+
+Para repetir la regresión: `npm run test:e2e -- --grep "navbar pegada"`.
+
+## Resumen de la auditoría de optimización anterior
 
 - Typecheck, lint, build y revisión de espacios de Git: correctos. Git únicamente advierte sobre conversión de LF a CRLF en Windows.
 - **31 pruebas de lógica, IndexedDB y SQL: 31 pasaron.**

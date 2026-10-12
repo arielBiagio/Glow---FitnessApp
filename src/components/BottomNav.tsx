@@ -23,7 +23,7 @@ export default function BottomNav({ days, activeTab, onSelectTab }: BottomNavPro
   const tabWidth = 100 / tabs.length;
 
   return (
-    <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+12px)] left-3 right-3 z-30 max-w-[calc(448px-24px)] mx-auto">
+    <div className="bottom-nav-position fixed left-3 right-3 z-30 max-w-[calc(448px-24px)] mx-auto">
       <nav className="liquid-nav" aria-label="Navegación principal">
         <div className="relative z-10 flex items-center select-none">
           <div
