@@ -9,9 +9,10 @@ const day = structuredClone(routine.days[0]);
 day.sections = [{ ...day.sections[0], exercises: [day.sections[0].exercises[0], { ...day.sections[1].exercises[0], sets: 2 }] }];
 const fixture = { ...routine, days: [day], weeklySchedule: [{ weekday: 1, dayId: day.id, session: 'A', day: 'Lunes' }] };
 let db: PGlite;
-async function asUser(id: string | null, role = 'authenticated') {
+async function asUser(id: string | null, role = 'authenticated', clientId: string | null = null) {
   await db.exec('reset role');
   await db.query("select set_config('request.jwt.claim.sub', $1, false)", [id ?? '']);
+  await db.query("select set_config('request.jwt.claims', $1, false)", [JSON.stringify({ sub: id, role, client_id: clientId })]);
   await db.exec(`set role ${role}`);
 }
 async function activate(value = fixture, start = '2026-10-12', date = start) {
@@ -29,15 +30,19 @@ async function save(sessionId: string, revision: number, operation: unknown, ope
 beforeAll(async () => {
   db = new PGlite();
   await db.exec(`
-    create role anon; create role authenticated;
+    create role anon; create role authenticated; create role authenticator; create role supabase_auth_admin;
     create schema auth;
     create table auth.users(id uuid primary key);
     create function auth.uid() returns uuid language sql stable as
       $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+    create function auth.jwt() returns jsonb language sql stable as
+      $$ select coalesce(nullif(current_setting('request.jwt.claims', true), ''), '{}')::jsonb $$;
     grant usage on schema auth to anon, authenticated;
   `);
   await db.exec(readFileSync('supabase/migrations/202610120001_workout_backend.sql', 'utf8'));
   await db.exec(readFileSync('supabase/migrations/202610120002_profile_display_name.sql', 'utf8'));
+  await db.exec(readFileSync('supabase/migrations/202610120003_mcp_profile_oauth.sql', 'utf8'));
+  await db.exec(readFileSync('supabase/migrations/202610120004_mcp_workout_reads.sql', 'utf8'));
 });
 afterAll(async () => { await db?.close(); });
 beforeEach(async () => {
@@ -47,6 +52,64 @@ beforeEach(async () => {
 });
 
 describe('SQL real: permisos, consistencia e historial', () => {
+  it('el rol MCP lee su perfil e historial permitido, sin escritura ni RPC de progreso', async () => {
+    const session = (await activate()).sessions[0];
+    await asUser(B); await activate();
+    await asUser(A, 'glow_mcp_reader', 'sesame-fixture');
+    expect((await db.query<{ id: string }>('select id,display_name,timezone,selected_routine_id from public.profiles')).rows.map(row => row.id)).toEqual([A]);
+    expect((await db.query<{ user_id: string }>('select user_id from public.workout_weeks')).rows.map(row => row.user_id)).toEqual([A]);
+    expect((await db.query<{ user_id: string }>('select user_id from public.workout_sessions')).rows.every(row => row.user_id === A)).toBe(true);
+    await expect(db.query('select created_at from public.profiles')).rejects.toMatchObject({ code: '42501' });
+    await expect(db.query('select * from public.workout_weeks')).rejects.toMatchObject({ code: '42501' });
+    await expect(db.query("update public.profiles set display_name='Agent changed it'")).rejects.toMatchObject({ code: '42501' });
+    await expect(db.query('delete from public.profiles')).rejects.toMatchObject({ code: '42501' });
+    await expect(db.query('delete from public.workout_sessions')).rejects.toMatchObject({ code: '42501' });
+    await expect(db.query('update public.workout_sets set completed=true')).rejects.toMatchObject({ code: '42501' });
+    await expect(db.query('select * from public.progress_operations')).rejects.toMatchObject({ code: '42501' });
+    await expect(activate()).rejects.toMatchObject({ code: '42501' });
+    await expect(save(session.id, 0, { kind: 'reset' })).rejects.toMatchObject({ code: '42501' });
+    await expect(db.query("select public.glow_get_profile('UTC')")).rejects.toMatchObject({ code: '42501' });
+    await asUser(A, 'glow_mcp_reader');
+    expect((await db.query('select id from public.profiles')).rows).toEqual([]);
+    expect((await db.query('select id from public.workout_sessions')).rows).toEqual([]);
+  });
+  it('las estadísticas MCP cuentan fechas reales, series y minutos de snapshots sin mezclar usuarios', async () => {
+    const first = (await activate()).sessions[0];
+    await save(first.id, 0, { kind: 'exercise', exerciseId: first.exercises[0].exerciseId, completed: true });
+    await save(first.id, 1, { kind: 'exercise', exerciseId: first.exercises[1].exerciseId, completed: true });
+    const second = (await activate(fixture, '2026-10-12', '2026-10-13')).sessions[1];
+    await save(second.id, 0, { kind: 'exercise', exerciseId: second.exercises[0].exerciseId, completed: true });
+    await asUser(B); const b = (await activate()).sessions[0];
+    await save(b.id, 0, { kind: 'exercise', exerciseId: b.exercises[0].exerciseId, completed: true });
+    await asUser(A, 'glow_mcp_reader', 'sesame-fixture');
+    const stats = async (from: string | null = null, to: string | null = null) => (await db.query<{ value: Record<string, unknown> }>('select public.glow_mcp_statistics($1::date,$2::date) as value', [from, to])).rows[0].value;
+    expect(await stats()).toMatchObject({ diasEntrenados: 2, semanasActivas: 1, sesionesCompletas: 1, minutosEstimados: fixture.days[0].summary.total, ejerciciosCompletos: 3, seriesCompletas: 2, primeraFechaActividad: '2026-10-12', ultimaFechaActividad: '2026-10-13' });
+    expect(await stats('2026-10-13', '2026-10-13')).toMatchObject({ diasEntrenados: 1, sesionesCompletas: 0, minutosEstimados: 0, ejerciciosCompletos: 1 });
+    expect(await stats('2026-10-14', '2026-10-14')).toMatchObject({ diasEntrenados: 0, seriesCompletas: 0, primeraFechaActividad: null });
+    await expect(stats('2026-10-14', '2026-10-12')).rejects.toMatchObject({ code: '22023' });
+    await asUser(A); await save(first.id, 2, { kind: 'reset' });
+    await expect(stats()).rejects.toMatchObject({ code: '42501' });
+    await asUser(A, 'glow_mcp_reader', 'sesame-fixture');
+    expect(await stats()).toMatchObject({ diasEntrenados: 1, ejerciciosCompletos: 1, seriesCompletas: 0, minutosEstimados: 0 });
+    await asUser(A, 'glow_mcp_reader');
+    await expect(stats()).rejects.toMatchObject({ code: '42501' });
+  });
+  it('el hook conserva el login normal, restringe OAuth y solo puede ejecutarlo Supabase Auth', async () => {
+    const claims = { iss: 'https://example.supabase.co/auth/v1', sub: A, role: 'authenticated', aud: 'authenticated', user_metadata: { role: 'service_role' } };
+    const normal = { claims, authentication_method: 'password' };
+    await expect(db.query('select public.glow_mcp_access_token_hook($1::jsonb)', [JSON.stringify(normal)])).rejects.toMatchObject({ code: '42501' });
+    await asUser(null, 'supabase_auth_admin');
+    const hook = async (event: object) => (await db.query<{ result: { claims: typeof claims; error?: unknown } }>('select public.glow_mcp_access_token_hook($1::jsonb) as result', [JSON.stringify(event)])).rows[0].result;
+    expect(await hook(normal)).toEqual(normal);
+    const delegated = await hook({ claims: { ...claims, client_id: 'sesame-fixture' }, authentication_method: 'oauth_provider/authorization_code' });
+    expect(delegated.claims.role).toBe('glow_mcp_reader');
+    expect(delegated.claims.aud).toEqual(['authenticated', 'https://example.supabase.co/functions/v1/glow-mcp']);
+    expect(delegated.claims.user_metadata).toEqual(claims.user_metadata);
+    expect((await hook({ claims, authentication_method: 'oauth_provider/authorization_code' })).error).toBeTruthy();
+    expect((await hook({ claims: { ...claims, client_id: 'sesame-fixture', iss: 'http://evil.example/auth/v1' } })).error).toBeTruthy();
+    // Token refresh keeps client_id and must retain the restrictive role.
+    expect((await hook({ claims: { ...delegated.claims, client_id: 'sesame-fixture' }, authentication_method: 'token_refresh' })).claims.role).toBe('glow_mcp_reader');
+  });
   it('el nombre puede administrarse sin cambiar el login y sigue protegido por RLS', async () => {
     await activate();
     await db.exec('reset role');

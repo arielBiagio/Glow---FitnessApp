@@ -1,4 +1,135 @@
-# QA Report: GLOW — optimización (2026-10-12)
+# QA Report: GLOW (2026-10-12)
+
+## MCP 0.2.0: rutinas, calendario y estadísticas (2026-10-12)
+
+**Veredicto: implementado y desplegado; preguntas reales en Sesame pendientes.**
+El usuario confirmó la migración 004 aplicada en el mismo proyecto. Se actualizó
+únicamente `glow-mcp`; no se modificaron datos, claves, hook ni otras funciones.
+No se inició sesión como usuario desde el agente de desarrollo. Sin QA completo,
+Lighthouse, suite E2E completa, commit ni push.
+
+### Plan y cobertura focalizada
+
+1. Confirmar criterios de calendario, sesiones y Resumen leyendo la app existente.
+2. Verificar permisos SQL y agregación en PGlite, con dos usuarios aislados.
+3. Comprobar las cuatro rutinas JSON y snapshots semanales con fetch simulado.
+4. Probar zona horaria, descanso, cambio de año/DST, fechas inválidas y progreso
+   independiente por fecha, sin crear sesiones.
+5. Comprobar registro/llamada de las cinco herramientas con el SDK oficial y las
+   validaciones anteriores de JWT, Origin y rutas internas.
+6. Comprobar tipos/build antes del deploy y solo disponibilidad pública después;
+   no comprobar perfiles o estadísticas reales con credenciales ajenas al agente.
+
+### Resultados
+
+- Base: typecheck, lint, build y **51/51** pruebas correctos.
+- Final: typecheck, Deno check, lint, build y **64/64** pruebas correctos. Nuevas
+  verificaciones de SQL, catálogo, snapshots, calendario, rangos y errores. La
+  negociación del SDK llama las cinco herramientas con datos ficticios.
+- Evidencia: [resultado local](qa-artifacts/mcp-workouts-vitest-results.json).
+- Despliegue: MCP sin token `401` con challenge, metadata `200` con recurso/issuer
+  correctos y catálogo público Netlify `200` con cuatro rutinas. Son comprobaciones
+  públicas de disponibilidad, no QA de producción ni lectura privada real.
+- El frontend solo cambia el texto de consentimiento para reflejar el acceso a
+  progreso/estadísticas. Se recompiló `dist/`; publicar esa versión en Netlify.
+
+### Garantías y límites
+
+- Migración 004 concede solo SELECT de columnas necesarias y un RPC STABLE,
+  SECURITY INVOKER, sin parámetro de usuario y protegido por RLS. A/B no mezclan
+  datos. Continúan denegados DELETE/UPDATE, RPC de progreso y lectura del ledger.
+- El calendario usa la zona del perfil y el helper de fechas existente. Descanso
+  no se reemplaza por el día sugerido de la app. Los snapshots prevalecen sobre
+  recetas nuevas; sin snapshot pasado, la respuesta advierte que es proyección.
+- No se reenvían tokens al catálogo público. Se rechazan archivos externos,
+  redirects, rutinas desconocidas/duplicadas, fechas inexistentes y tamaño >200 KB.
+- Un error de lectura no se presenta como cero. El historial vacío sí devuelve
+  cero; una caída del catálogo no borra estadísticas obtenidas de Supabase.
+- Minutos estimados y progreso solo sincronizado se identifican explícitamente.
+- No se cambiaron la selección de rutinas ni el formato/almacenamiento JSON.
+- Queda verificar las nuevas consultas desde Sesame y publicar el consentimiento
+  actualizado. La conexión anterior de perfil fue confirmada por el usuario.
+
+No hay fallos reproducibles abiertos dentro de esta cobertura local. El límite de
+revocación de JWT descrito en la guía sigue vigente. CI puede añadirse como paso
+opcional; no se creó un workflow sin aprobación.
+
+## Despliegue MCP en Supabase (2026-10-12)
+
+**Veredicto: MCP desplegado; consentimiento real en Sesame pendiente.** Se identificó
+el proyecto por la URL pública de GLOW y la sesión del CLI iniciada por el usuario.
+Se creó únicamente `glow-mcp` y se configuraron sus tres variables (publishable key,
+resource URL y origins). No se ejecutaron migraciones, no se modificaron claves de
+firma ni otras funciones, no se consultaron perfiles reales y no se hizo commit/push.
+
+### Arreglados
+
+- **[S2] Ruta interna distinta tras el gateway de Supabase.** El primer despliegue
+  devolvía `404` en el endpoint y su metadata porque el gateway elimina
+  `/functions/v1`. Una nueva prueba local reprodujo el `404` frente al `401` esperado.
+  El handler ahora normaliza únicamente el prefijo exacto de esta función, manteniendo
+  la URL pública para issuer/audience/metadata. El test y el handshake del SDK usando
+  la ruta interna pasan después del cambio. No se redujo ninguna validación OAuth.
+
+### Comprobación acotada
+
+- Plan: reproducir localmente la ruta del gateway; validar autenticación/SDK con
+  fixtures; comprobar tipos Deno; actualizar la función; verificar solo las rutas
+  públicas del despliegue. Sin QA completo, Lighthouse ni accesos autenticados reales.
+- Línea base: typecheck, lint, build y **50/50** pruebas unitarias/SQL correctos.
+- Final: typecheck, lint, build (frontend sin cambios) y Deno check correctos;
+  **51/51** pruebas unitarias/SQL correctos. No se repitió Playwright.
+- Evidencia local: [resultado de pruebas](qa-artifacts/mcp-deploy-vitest-results.json).
+- Disponibilidad del despliegue: endpoint MCP `401` con `WWW-Authenticate`;
+  metadata `200` con recurso y servidor OAuth correctos; discovery de Supabase `200`
+  anunciando registro; JWKS público ES256; pantalla Netlify `/oauth/consent` `200`.
+  Son comprobaciones de disponibilidad/configuración pública, no aprobación del
+  flujo OAuth real ni del acceso a datos.
+
+### Pendientes
+
+- Agregar el endpoint en Sesame, completar autorización y pedir `mi_perfil`.
+- Verificar la emisión efectiva del rol/audience y la lectura del perfil en esa
+  conexión real. No se crearon clientes/grants ni se usaron cuentas de prueba en
+  producción para fingir una validación integral.
+
+Endpoint desplegado: `https://karfhpbfnuwkysmvtiad.supabase.co/functions/v1/glow-mcp`.
+
+## Comprobación focalizada: MCP de perfil y OAuth para Sesame
+
+**Veredicto: base local preparada; conexión real pendiente.** No se hizo QA completo. No se activó OAuth, se aplicó SQL ni se desplegó código en Supabase/Netlify reales. No se hizo commit/push. El servidor del usuario en 5173 no se detuvo.
+
+**Tipo:** SPA React con pantalla de consentimiento, Edge Function Deno/MCP y rol PostgreSQL específico.
+**Plan acotado:** tipos y compilación; JWT y discovery con claves efímeras; handshake con cliente SDK oficial; aislamiento SQL/RLS y permisos; tres recorridos de consentimiento con API simulada. Se excluyeron Lighthouse, suite E2E completa, iPhone físico y proveedores reales.
+
+### Resultados de esta etapa
+
+- Línea base: typecheck, lint, build y 31 pruebas existentes correctos.
+- Final: typecheck, `mcp:check` (Deno), lint y build correctos.
+- **50/50 pruebas Vitest/SQL:** 31 anteriores, 17 de MCP/validación OAuth y 2 adicionales de permisos/hook SQL.
+- **3/3 E2E focalizados en Chrome con Supabase simulado:** login conservando `authorization_id`, autorización/cancelación explícitas, retorno al callback preservando estado, texto externo no interpretado como HTML y solicitud vencida sin botón de aprobación. No se repitió WebKit.
+- La instalación de las dependencias de desarrollo informó 0 vulnerabilidades. El SDK MCP, el cliente de prueba y Deno no se incluyen en el bundle del frontend. La pantalla OAuth se carga de forma diferida (5,24 KB sin comprimir).
+- Evidencia: [Vitest/SQL](qa-artifacts/mcp-vitest-results.json), [OAuth Playwright](qa-artifacts/oauth-playwright-results.json), [pantalla de consentimiento](qa-artifacts/oauth-consent-approve.png). El archivo genérico `playwright-results.json` ahora corresponde a esta ejecución acotada, no a las suites históricas que se describen más abajo.
+
+### Protecciones comprobadas
+
+- Discovery público y `401` con `WWW-Authenticate`; firma y expiración JWT, issuer y audience exactos, client_id, rol y UUID. Rechazo de tokens normales, de servicio, manipulados y de usuarios anónimos.
+- SDK oficial contra el mismo handler HTTP, con única herramienta `mi_perfil`, sin parámetros de usuario, anotaciones de solo lectura y clientes separados por petición.
+- Rol `glow_mcp_reader` sin herencia de `authenticated`: solo SELECT de cuatro columnas del perfil propio; niega escritura, lectura de entrenamientos, RPC de progreso y ejecución del hook. Login normal y refresco OAuth comprobados con eventos simulados.
+- Origin allowlist, límite de cuerpo de 16 KiB, timeouts, mensajes de error sin datos internos y respuesta explícita si no existe perfil; la herramienta no crea registros.
+
+### Pendientes y límites
+
+- Aplicar la migración 003 y activar el Custom Access Token Hook **antes** de habilitar OAuth. Los grants y el hook se ejecutaron en PostgreSQL efímero, no contra Supabase alojado.
+- Publicar el frontend con `/oauth/consent`, configurar Site URL/Authorization Path y desplegar `glow-mcp` con sus variables. Revisar claves ES256/RS256 y registro de clientes.
+- Confirmar en Sesame la cadena real de discovery, registro, PKCE, consentimiento y refresco. La documentación pública confirma OAuth, pero no todos los detalles de compatibilidad de su cliente.
+- Los JWT ya emitidos pueden conservar acceso hasta su expiración tras revocar un grant. No se implementó una consulta de revocación por petición.
+- Rutinas/estadísticas y migración JSON → JSONB no forman parte de este hito. No hay fallos reproducibles abiertos en esta cobertura local; las dependencias de despliegue no se consideran aprobadas.
+- Como paso opcional, se puede agregar CI para estas comprobaciones. No se creó un workflow sin aprobación.
+
+Configuración detallada: [MCP y Sesame](docs/mcp-sesame.md). Para repetir las pruebas focalizadas: `npm run test:e2e -- --project=cloud-mocked --grep "OAuth:"`.
+
+## Historial: optimización y navbar
 
 **Veredicto: listo con reservas.** La optimización y las pruebas locales pasan. Antes de publicar hay que comprobar la integración desplegada con Supabase y el comportamiento en un iPhone físico; estos entornos no se probaron aquí.
 

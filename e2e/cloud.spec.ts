@@ -202,3 +202,47 @@ test('fallo del historial conserva la app y permite actualizar', async ({ page }
   await page.getByRole('navigation').getByRole('button', { name: /Día A —/ }).click();
   await expect(page.getByRole('button', { name: 'Marcar Caminata lateral con banda como completado', exact: true })).toBeEnabled();
 });
+
+for (const approve of [true, false]) {
+  test(`OAuth: login conserva la solicitud y permite ${approve ? 'autorizar' : 'cancelar'} sin guardar entrenamientos`, async ({ page }) => {
+    const cloud = await mockCloud(page);
+    let decisions = 0;
+    const callback = `https://sesame.example.test/callback?${approve ? 'code=fixture' : 'error=access_denied'}&state=fixture-state`;
+    await page.route('**/auth/v1/oauth/authorizations/**', async route => {
+      if (route.request().method() === 'POST') {
+        decisions++;
+        expect(route.request().postDataJSON()).toEqual({ action: approve ? 'approve' : 'deny' });
+        return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ redirect_url: callback }) });
+      }
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+        authorization_id: 'test-authorization', client: { id: 'fixture-client', name: 'Sesame <b>fixture</b>' },
+        user: { id: user.id, email: user.email }, scope: 'openid profile', redirect_uri: 'https://sesame.example.test/callback',
+      }) });
+    });
+    await page.route('https://sesame.example.test/**', route => route.fulfill({ contentType: 'text/html', body: '<p>Callback local de prueba</p>' }));
+    await page.goto('/oauth/consent?authorization_id=test-authorization');
+    await login(page);
+    await expect(page.getByRole('heading', { name: 'Conectar tu agente' })).toBeVisible();
+    await expect(page.getByText('Sesame <b>fixture</b>', { exact: true })).toBeVisible();
+    await expect(page.locator('section b')).toHaveCount(0);
+    await expect(page.getByRole('navigation')).toHaveCount(0);
+    expect(decisions).toBe(0);
+    await page.screenshot({ animations: 'disabled', path: `qa-artifacts/oauth-consent-${approve ? 'approve' : 'deny'}.png` });
+    await page.getByRole('button', { name: approve ? 'Autorizar' : 'Cancelar', exact: true }).click();
+    await expect(page).toHaveURL(callback);
+    expect(decisions).toBe(1);
+    expect(cloud.writes()).toBe(0);
+  });
+}
+
+test('OAuth: una solicitud vencida no puede aprobarse y permite reintentar', async ({ page }) => {
+  await mockCloud(page);
+  await page.route('**/auth/v1/oauth/authorizations/**', route => route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ message: 'Expired fixture' }) }));
+  await page.goto('/oauth/consent?authorization_id=test-authorization');
+  await page.getByLabel('Correo electrónico').fill(user.email);
+  await page.getByLabel('Contraseña', { exact: true }).fill(testPassword);
+  await page.getByRole('button', { name: 'Ingresar', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('No se pudo cargar la solicitud');
+  await expect(page.getByRole('button', { name: 'Autorizar', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Reintentar' })).toBeVisible();
+});

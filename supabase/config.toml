@@ -1,0 +1,5 @@
+project_id = "glow-split"
+
+# Discovery must reach the function without a JWT. handler.ts validates JWTs itself.
+[functions.glow-mcp]
+verify_jwt = false

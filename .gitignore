@@ -19,6 +19,8 @@ test-results/
 qa-artifacts/
 dist-qa-local/
 dist-qa-cloud/
+supabase/.temp/
+supabase/functions/glow-mcp/node_modules/
 
 # Editor directories and files
 .vscode/*

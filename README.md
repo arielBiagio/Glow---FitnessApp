@@ -68,6 +68,7 @@ Las pruebas utilizan datos de ejemplo, PostgreSQL embebido y una API de Supabase
 
 - [Configuración de Supabase](docs/supabase-setup.md).
 - [Arquitectura y almacenamiento](docs/backend-supabase.md).
+- [Conectar GLOW con Sesame mediante MCP y OAuth](docs/mcp-sesame.md) — consultas de solo lectura de rutinas, calendario y estadísticas.
 - [Informe de QA y rendimiento](qa-report.md).
 
 Las rutinas se definen en `public/routines/`. Al personalizarlas, conservá los IDs existentes y aumentá la versión cuando cambies la prescripción para no alterar el historial.
