@@ -3,6 +3,7 @@ import type { Routine } from '../types';
 import type { useWorkoutProgress } from '../hooks/useWorkoutProgress';
 import { useWorkoutSummary } from '../hooks/useWorkoutSummary';
 import AnimatedNumber from './AnimatedNumber';
+import CollapsibleInfo from './CollapsibleInfo';
 
 interface Props {
   userId: string | null;
@@ -40,12 +41,14 @@ export default function WorkoutSummary({ userId, ready, progress, routine, onSel
         {notice && <p role="status" className="text-xs text-amber-300/80 mt-3">{notice} <button type="button" onClick={retry} className="underline">Actualizar</button></p>}
       </section>
       {routine && <>
-        <section key={`about-${routine.id}`} className="glass-card rounded-2xl p-4 routine-content-transition" aria-label="Sobre tu rutina">
-          <h2 className="text-sm font-semibold text-white mb-2">Sobre tu rutina</h2>
-          <p className="text-xs text-zinc-400 leading-relaxed">{routine.description}</p>
-          <div className="flex flex-wrap gap-2 mt-3 text-[10px] text-zinc-300">
-            {[routine.goal, routine.level, routine.frequency].map(value => <span key={value} className="rounded-lg bg-white/[0.04] border border-white/5 px-2 py-1">{value}</span>)}
-          </div>
+        <section key={`about-${routine.id}`} className="routine-content-transition" aria-label="Sobre tu rutina">
+          <CollapsibleInfo context="Sobre tu rutina" className="glass-card">
+            <h2 className="text-sm font-semibold text-white mb-2">Sobre tu rutina</h2>
+            <p className="text-xs text-zinc-400 leading-relaxed">{routine.description}</p>
+            <div className="flex flex-wrap gap-2 mt-3 text-[10px] text-zinc-300">
+              {[routine.goal, routine.level, routine.frequency].map(value => <span key={value} className="rounded-lg bg-white/[0.04] border border-white/5 px-2 py-1">{value}</span>)}
+            </div>
+          </CollapsibleInfo>
         </section>
         <section key={`week-${routine.id}`} className="glass-card rounded-2xl p-4 routine-content-transition" aria-label="Avance de esta semana">
           <div className="flex justify-between items-center mb-3">

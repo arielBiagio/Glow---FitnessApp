@@ -30,11 +30,12 @@ async function save(sessionId: string, revision: number, operation: unknown, ope
 beforeAll(async () => {
   db = new PGlite();
   await db.exec(`
-    create role anon; create role authenticated; create role authenticator; create role supabase_auth_admin;
+    create role anon; create role authenticated; create role authenticator; create role supabase_auth_admin; create role service_role;
     create schema auth;
     create table auth.users(id uuid primary key);
     create function auth.uid() returns uuid language sql stable as
-      $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+      $$ select coalesce(nullif(current_setting('request.jwt.claim.sub', true), ''),
+        nullif(current_setting('request.jwt.claims', true), '')::jsonb->>'sub')::uuid $$;
     create function auth.jwt() returns jsonb language sql stable as
       $$ select coalesce(nullif(current_setting('request.jwt.claims', true), ''), '{}')::jsonb $$;
     grant usage on schema auth to anon, authenticated;
@@ -43,6 +44,10 @@ beforeAll(async () => {
   await db.exec(readFileSync('supabase/migrations/202610120002_profile_display_name.sql', 'utf8'));
   await db.exec(readFileSync('supabase/migrations/202610120003_mcp_profile_oauth.sql', 'utf8'));
   await db.exec(readFileSync('supabase/migrations/202610120004_mcp_workout_reads.sql', 'utf8'));
+  await db.exec(readFileSync('supabase/migrations/202610140005_mcp_statistics_identity.sql', 'utf8'));
+  // Hosted auth schemas may not grant USAGE to custom roles. Exercise that setup
+  // throughout this suite, rather than assuming a local superuser's grant works.
+  await db.exec('revoke usage on schema auth from glow_mcp_reader');
 });
 afterAll(async () => { await db?.close(); });
 beforeEach(async () => {
@@ -52,6 +57,73 @@ beforeEach(async () => {
 });
 
 describe('SQL real: permisos, consistencia e historial', () => {
+  it('las estadísticas MCP funcionan sin USAGE en el esquema auth gestionado', async () => {
+    const session = (await activate()).sessions[0];
+    await save(session.id, 0, { kind: 'exercise', exerciseId: session.exercises[0].exerciseId, completed: true });
+    await asUser(B); const other = (await activate()).sessions[0];
+    await save(other.id, 0, { kind: 'exercise', exerciseId: other.exercises[0].exerciseId, completed: true });
+    await db.exec('reset role; revoke usage on schema auth from glow_mcp_reader');
+    try {
+      await asUser(A, 'glow_mcp_reader', 'sesame-fixture');
+      expect((await db.query<{ allowed: boolean }>("select has_schema_privilege(current_user, 'auth', 'USAGE') as allowed")).rows[0].allowed).toBe(false);
+      expect((await db.query<{ user_id: string }>('select user_id from public.workout_sessions')).rows.every(row => row.user_id === A)).toBe(true);
+      const result = await db.query<{ value: Record<string, unknown> }>('select public.glow_mcp_statistics(null::date,null::date) as value');
+      expect(result.rows[0].value).toMatchObject({ diasEntrenados: 1, ejerciciosCompletos: 1, sesionesCompletas: 0 });
+      await expect(db.query('delete from public.workout_sessions')).rejects.toMatchObject({ code: '42501' });
+    } finally {
+      await db.exec('reset role');
+    }
+  });
+  it('la migración 005 es repetible, invoker y no concede escritura ni acceso a auth', async () => {
+    await db.exec('reset role');
+    await db.exec(readFileSync('supabase/migrations/202610140005_mcp_statistics_identity.sql', 'utf8'));
+    const { rows } = await db.query<{ elevated: boolean; stable: string; usage: boolean; reader: boolean; public_login: boolean; anon: boolean; service: boolean }>(`
+      select p.prosecdef as elevated, p.provolatile as stable,
+        has_schema_privilege('glow_mcp_reader','auth','USAGE') as usage,
+        has_function_privilege('glow_mcp_reader',p.oid,'EXECUTE') as reader,
+        has_function_privilege('authenticated',p.oid,'EXECUTE') as public_login,
+        has_function_privilege('anon',p.oid,'EXECUTE') as anon,
+        has_function_privilege('service_role',p.oid,'EXECUTE') as service
+      from pg_proc p where p.oid='public.glow_mcp_statistics(date,date)'::regprocedure
+    `);
+    expect(rows[0]).toEqual({ elevated: false, stable: 's', usage: false, reader: true, public_login: false, anon: false, service: false });
+  });
+  it('las estadísticas exigen identidad y cliente OAuth del JWT, sin aceptar un usuario por parámetro', async () => {
+    await activate();
+    await asUser(A, 'glow_mcp_reader', 'sesame-fixture');
+    const call = () => db.query('select public.glow_mcp_statistics(null::date,null::date)');
+    for (const claims of [
+      {}, { sub: A, role: 'glow_mcp_reader' },
+      { sub: A, role: 'glow_mcp_reader', client_id: ' ' },
+      { sub: A, role: 'glow_mcp_reader', client_id: 42 },
+      { sub: 'invalid-uuid', role: 'glow_mcp_reader', client_id: 'sesame-fixture' },
+      { sub: A, role: 'authenticated', client_id: 'sesame-fixture' },
+    ]) {
+      await db.query("select set_config('request.jwt.claims',$1,false)", [JSON.stringify(claims)]);
+      await expect(call()).rejects.toMatchObject({ code: '42501' });
+    }
+    await db.query("select set_config('request.jwt.claims','',false)");
+    await expect(call()).rejects.toMatchObject({ code: '42501' });
+  });
+  it('un JWT sin sesiones devuelve ceros y RLS sigue bloqueando una identidad discordante', async () => {
+    const session = (await activate()).sessions[0];
+    await save(session.id, 0, { kind: 'exercise', exerciseId: session.exercises[0].exerciseId, completed: true });
+    await asUser(B, 'glow_mcp_reader', 'sesame-fixture');
+    const stats = async () => (await db.query<{ value: Record<string, unknown> }>('select public.glow_mcp_statistics(null::date,null::date) as value')).rows[0].value;
+    expect(await stats()).toMatchObject({ diasEntrenados: 0, ejerciciosCompletos: 0, seriesCompletas: 0 });
+    // Deliberate mismatch with the legacy setting used by this test's auth.uid:
+    // the RPC's JWT user filter and existing RLS intersect, never bypass each other.
+    await db.query("select set_config('request.jwt.claims',$1,false)", [JSON.stringify({ sub: A, role: 'glow_mcp_reader', client_id: 'sesame-fixture' })]);
+    expect(await stats()).toMatchObject({ diasEntrenados: 0, ejerciciosCompletos: 0 });
+  });
+  it('las estadísticas funcionan con el contexto JSON de PostgREST sin la variable legacy sub', async () => {
+    const session = (await activate()).sessions[0];
+    await save(session.id, 0, { kind: 'exercise', exerciseId: session.exercises[0].exerciseId, completed: true });
+    await asUser(A, 'glow_mcp_reader', 'sesame-fixture');
+    await db.query("select set_config('request.jwt.claim.sub','',false)");
+    const result = await db.query<{ value: Record<string, unknown> }>('select public.glow_mcp_statistics(null::date,null::date) as value');
+    expect(result.rows[0].value).toMatchObject({ diasEntrenados: 1, ejerciciosCompletos: 1 });
+  });
   it('el rol MCP lee su perfil e historial permitido, sin escritura ni RPC de progreso', async () => {
     const session = (await activate()).sessions[0];
     await asUser(B); await activate();
@@ -149,9 +221,10 @@ describe('SQL real: permisos, consistencia e historial', () => {
     expect(week.sessions[0].revision).toBe(0);
     expect(week.sessions[0].exercises).toHaveLength(2);
   });
-  it('activa las cuatro rutinas reales sin perder sus planes', async () => {
-    for (const filename of ['glow-cele-split', 'upper-lower-hypertrophy', 'fuerza-funcional', 'full-body-foundation']) {
-      const value = JSON.parse(readFileSync(`public/routines/${filename}.json`, 'utf8'));
+  it('activa todas las rutinas del catálogo sin perder sus planes', async () => {
+    const catalog = JSON.parse(readFileSync('public/routines/index.json', 'utf8'));
+    for (const entry of catalog.routines) {
+      const value = JSON.parse(readFileSync(`public${entry.file}`, 'utf8'));
       const week = await activate(value);
       expect(week.sessions.length).toBe(value.days.length);
     }

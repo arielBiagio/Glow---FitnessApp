@@ -59,11 +59,11 @@ function setup(options: { noWeek?: boolean; noProfile?: boolean; noRoutine?: boo
 }
 
 describe('rutinas y calendario MCP', () => {
-  it('valida las cuatro rutinas reales y lista el catálogo sin autenticación reenviada', async () => {
+  it('valida todas las rutinas reales y lista el catálogo sin autenticación reenviada', async () => {
     for (const entry of manifest.routines) expect(routineSchema.parse(JSON.parse(readFileSync(`public${entry.file}`, 'utf8'))).id).toBe(entry.id);
     const { reader, requests } = setup();
     const result = await reader.listRoutines();
-    expect(result.rutinas).toHaveLength(4);
+    expect(result.rutinas).toHaveLength(manifest.routines.length);
     expect(result.rutinas[0]).not.toHaveProperty('file');
     expect(requests).toHaveLength(1);
   });

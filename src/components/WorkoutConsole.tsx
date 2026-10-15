@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import ExerciseCard from './ExerciseCard';
-import { Clock, Info, RotateCcw } from 'lucide-react';
+import CollapsibleInfo from './CollapsibleInfo';
+import { Clock, RotateCcw } from 'lucide-react';
 import type { CompletedMap, SetsMap, WorkoutDay } from '../types';
 
 interface WorkoutConsoleProps {
@@ -93,8 +94,8 @@ export default function WorkoutConsole({
       </div>
 
       <div className="space-y-6 pb-20">
-        {activeDay.sections.map((section, secIdx) => (
-          <div key={secIdx} className="space-y-3.5">
+        {activeDay.sections.map((section) => (
+          <div key={`${activeDay.id}-${section.id}`} className="space-y-3.5">
             <div className="flex items-center justify-between border-b border-white/5 pb-1">
               <h3 className="font-sans font-semibold text-xs text-zinc-400 uppercase tracking-wider">
                 {section.title}
@@ -109,10 +110,9 @@ export default function WorkoutConsole({
             </div>
 
             {section.note && (
-              <div className="p-3.5 rounded-2xl bg-[#7B61FF]/5 border border-[#7B61FF]/15 text-zinc-300 text-xs flex gap-2.5">
-                <Info className="w-4 h-4 text-plasma-ink flex-shrink-0 mt-0.5" />
+              <CollapsibleInfo context={section.title}>
                 <p className="leading-relaxed font-sans">{section.note}</p>
-              </div>
+              </CollapsibleInfo>
             )}
 
             <div className="space-y-3">

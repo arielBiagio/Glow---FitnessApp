@@ -1,6 +1,7 @@
 import { Calendar, CheckCircle2, Zap } from 'lucide-react';
 import type { ScienceFactor, WeeklyScheduleItem } from '../types';
 import type { WorkoutSession } from '../lib/workouts';
+import CollapsibleInfo from './CollapsibleInfo';
 
 interface WeeklyScheduleProps {
   weeklySchedule: WeeklyScheduleItem[];
@@ -82,11 +83,8 @@ export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelec
         </div>
       </div>
 
-      <div className="glass-card rounded-[2rem] p-5 border-glow relative overflow-hidden">
-        <div className="absolute -right-12 -bottom-12 w-24 h-24 rounded-full bg-plasma/10 blur-2xl pointer-events-none"></div>
-
-        <div className="flex items-center gap-2 mb-4">
-          <Zap className="w-4 h-4 text-plasma" />
+      <CollapsibleInfo context="Principios del Protocolo" icon={Zap} className="glass-card border-glow">
+        <div className="mb-4">
           <h3 className="font-sans font-semibold text-sm text-white tracking-wide">
             Principios del Protocolo
           </h3>
@@ -107,7 +105,7 @@ export default function WeeklySchedule({ weeklySchedule, scienceFactors, onSelec
             </div>
           ))}
         </div>
-      </div>
+      </CollapsibleInfo>
 
       <p className="text-xs text-zinc-400 text-center">El avance se guarda automáticamente al entrenar.</p>
 

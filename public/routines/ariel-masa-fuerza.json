@@ -1,0 +1,334 @@
+{
+  "id": "ariel-masa-fuerza",
+  "version": 1,
+  "name": "Ariel N°1 — Masa y fuerza",
+  "description": "Cuatro días superior/inferior para ganar músculo, desarrollar fuerza con cargas limitadas y mantener el motor con remo. Mancuernas fijas, máquina de press, polea regulable y piso; sin banco ni barras.",
+  "author": "GLOW · Plan para Ariel",
+  "level": "Intermedio",
+  "frequency": "4 días/semana · ~60 min",
+  "goal": "Masa, fuerza y acondicionamiento",
+  "accentColor": "#A78BFA",
+  "days": [
+    {
+      "id": "dia-a",
+      "name": "Día A",
+      "subtitle": "Superior — Pecho y remo",
+      "tag": "Fuerza + masa",
+      "summary": { "warmup": 6, "main": 42, "metabolic": 8, "cooldown": 4, "total": 60 },
+      "sections": [
+        {
+          "id": "dia-a-warmup", "title": "Calentamiento", "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "6 min en total. No fatigarte: preparar articulaciones y practicar los movimientos del día.",
+          "exercises": [
+            { "id": "ariel-a-remo-suave", "name": "Remo de aire suave", "volume": "3 min · RPE 3–4/10", "description": "Empujá con piernas, abrí la cadera y después tirá con brazos. Volvé con brazos, cadera y piernas. Ritmo cómodo." },
+            { "id": "ariel-a-movilidad", "name": "Movilidad de hombros y flexiones escapulares", "volume": "1 min · 6–8 repeticiones de cada uno", "description": "Círculos suaves de hombros y flexiones escapulares con codos extendidos; apoyá rodillas si hace falta. Sin dolor." },
+            { "id": "ariel-a-aproximacion", "name": "Aproximación al press y al remo", "volume": "2 min · 1 serie ligera de cada uno", "description": "8–10 repeticiones cómodas con carga menor que la de trabajo. No cuentan como series efectivas." }
+          ]
+        },
+        {
+          "id": "dia-a-main", "title": "Trabajo Principal", "badge": "Main",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "Hasta 42 min. RIR 2 en principales y 1–2 en accesorios; RIR = repeticiones que podrías hacer antes del fallo. A1/A2, B1/B2 y C1/C2 se alternan si el espacio lo permite, sin correr. En cada unilateral, una serie registrada incluye ambos lados. No mezcles una mancuerna de 40 lb con una de 30 lb en un ejercicio bilateral.",
+          "exercises": [
+            {
+              "id": "ariel-a-press-maquina", "name": "A1 · Press de pecho en máquina", "volume": "4 × 6–10 · RIR 2", "rest": "120s antes de repetir A1",
+              "description": "Usá solo el ajuste de press horizontal previsto por la máquina. Espalda apoyada, muñecas neutras y recorrido cómodo; no bloquees violentamente los codos. Alterná con A2 si podés sin monopolizar estaciones.",
+              "tip": "El agarre prono o supino por sí solo no cambia un press de pecho en press de hombros. Si la máquina no permite press horizontal, usá press en el piso con 2 mancuernas iguales: 4 × 8–20.",
+              "science": "Empuje progresable para pecho y tríceps. Elegí una carga que haga exigente el rango sin perder la técnica.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 4
+            },
+            {
+              "id": "ariel-a-remo-mancuerna", "name": "A2 · Remo unilateral con mancuerna", "volume": "4 × 8–15 por lado · RIR 2", "rest": "90–120s después de ambos lados",
+              "description": "Bisagra de cadera, rodillas suaves y mano libre apoyada en tu muslo o un soporte fijo. Tirá el codo hacia la cadera sin girar el tronco. Hacé ambos brazos antes de marcar una serie.",
+              "tip": "Podés usar la única mancuerna de 40 lb, primero de un lado y luego del otro. Empezá por el lado más débil e igualá repeticiones. No te apoyes en el asiento móvil del remo.",
+              "science": "Trabaja dorsal y espalda alta sin necesitar barra de dominadas; no es idéntico a un jalón vertical.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 4
+            },
+            {
+              "id": "ariel-a-flexiones", "name": "B1 · Flexiones en el piso", "volume": "2 × 8–20 · RIR 1–2", "rest": "60–90s antes de repetir B1",
+              "description": "Cuerpo alineado, codos aproximadamente a 30–60° del tronco y pecho descendiendo entre las manos. Alterná con B2. Usá rodillas apoyadas si no llegás al mínimo con control.",
+              "tip": "Si 20 salen fáciles, agregá una pausa breve abajo o una variante de palanca más exigente, no repeticiones apresuradas. No agregues peso suelto sobre la espalda.",
+              "science": "Una alternativa de empuje con el peso corporal que complementa el press sin necesitar paralelas.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-a-elevacion-lateral", "name": "B2 · Elevaciones laterales con mancuernas", "volume": "2 × 12–25 · RIR 1–2", "rest": "60s antes de repetir B2",
+              "description": "Usá dos mancuernas ligeras iguales. Elevá brazos en un plano ligeramente adelantado hasta una altura cómoda cercana a hombros, con codos suaves y sin balancearte.",
+              "tip": "Los pesos menores a 30 lb son suficientes si el movimiento es controlado. No uses las de 40 y 30 lb como pareja.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-a-curl", "name": "C1 · Curl de bíceps con mancuernas", "volume": "2 × 10–20 · RIR 1–2", "rest": "60s antes de repetir C1",
+              "description": "Brazos junto al cuerpo y muñecas cómodas. Flexioná codos sin llevar la cadera hacia adelante. Alterná con C2 con cargas apropiadas para cada ejercicio.",
+              "tip": "Bajá de forma controlada. Si la siguiente mancuerna es demasiado pesada, progresá primero en repeticiones.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-a-triceps", "name": "C2 · Extensión de tríceps con cuerda", "volume": "2 × 10–20 · RIR 1–2", "rest": "60s antes de repetir C2",
+              "description": "Polea alta y cuerda. Mantené codos cerca del torso, extendé con control y regresá sin mover los hombros. Sin balanceo del cuerpo.",
+              "tip": "Si la polea está ocupada, hacé extensión de tríceps tumbado en el piso con dos mancuernas ligeras iguales, manteniendo los brazos estables.",
+              "loggable": true, "sets": 2
+            }
+          ]
+        },
+        {
+          "id": "dia-a-metabolic", "title": "Acondicionamiento", "badge": "Motor",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "note": "8 min después de las pesas. Esfuerzo fuerte controlado, no sprint máximo. No registrar cada intervalo como una serie de fuerza.",
+          "exercises": [
+            { "id": "ariel-a-intervalos", "name": "Remo · Intervalos cortos", "volume": "8 × (30s vivo + 30s suave) = 8 min", "description": "Tramos vivos a RPE 7–8/10 y suaves a 3–4/10. Mantené la misma técnica y un ritmo reproducible. Semana 1: solo 4 tramos vivos; los otros 4 minutos, suaves.", "tip": "Si la técnica se degrada o no recuperás entre intervalos, reducí el ritmo. No persigas calorías ni récords después de las pesas." }
+          ]
+        },
+        {
+          "id": "dia-a-cooldown", "title": "Vuelta a la calma", "badge": "Cooldown",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "id": "ariel-a-calma", "name": "Remo suave y movilidad cómoda", "volume": "2 min suaves + 2 min de movilidad", "description": "Bajá la intensidad y soltá hombros y columna torácica sin forzar posiciones. La movilidad no reemplaza la recuperación ni es requisito para ganar músculo." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-b", "name": "Día B", "subtitle": "Inferior — Sentadilla y bisagra", "tag": "Fuerza + masa",
+      "summary": { "warmup": 6, "main": 42, "metabolic": 8, "cooldown": 4, "total": 60 },
+      "sections": [
+        {
+          "id": "dia-b-warmup", "title": "Calentamiento", "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "6 min. Preparar piernas sin convertir el calentamiento en un circuito intenso.",
+          "exercises": [
+            { "id": "ariel-b-remo-suave", "name": "Remo de aire suave", "volume": "3 min · RPE 3–4/10", "description": "Empuje cómodo de piernas; sin aceleraciones fuertes." },
+            { "id": "ariel-b-patrones", "name": "Sentadillas, bisagras y zancadas sin carga", "volume": "1 min · 5–6 de cada patrón", "description": "Practicá un recorrido cómodo. En zancadas, hacé pocas repeticiones de cada lado; no busques fatiga." },
+            { "id": "ariel-b-aproximacion", "name": "Aproximación a split squat y peso muerto", "volume": "2 min · 1 serie ligera de cada uno", "description": "Pocas repeticiones con mancuernas ligeras; prepará el equilibrio y la posición antes de las series efectivas." }
+          ]
+        },
+        {
+          "id": "dia-b-main", "title": "Trabajo Principal", "badge": "Main",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "Hasta 42 min. RIR 2 en piernas; técnica antes que fatiga. Una serie unilateral incluye izquierda y derecha; 15–30s para cambiar de lado y después el descanso indicado. Hacé los dos primeros ejercicios por separado. Podés alternar gemelos y plancha al final.",
+          "exercises": [
+            {
+              "id": "ariel-b-split-squat", "name": "Split squat fijo con mancuernas", "volume": "3 × 8–15 por pierna · RIR 2", "rest": "120s después de ambas piernas",
+              "description": "Los dos pies permanecen en el piso, en posición de zancada. Bajá verticalmente dentro de tu recorrido cómodo y empujá principalmente con la pierna delantera. No requiere banco para el pie trasero.",
+              "tip": "Usá dos mancuernas iguales de hasta 30 lb cada una; si necesitás equilibrio, una sola de hasta 40 lb y mano libre en un soporte fijo. Marcá una serie cuando termines ambas piernas.",
+              "science": "El trabajo por pierna permite volver exigente una carga total limitada para cuádriceps y glúteos.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 3
+            },
+            {
+              "id": "ariel-b-rdl-bstance", "name": "Peso muerto rumano B-stance", "volume": "3 × 10–20 por lado · RIR 2", "rest": "90–120s después de ambos lados",
+              "description": "Un pie adelante soporta la mayor parte del esfuerzo; el trasero queda ligeramente atrás como apoyo. Llevá cadera atrás con columna estable. Cambiá de lado y completá ambos antes de marcar una serie.",
+              "tip": "Usá dos mancuernas iguales, hasta 2 × 30 lb. Bajá solo hasta donde mantenés el control de pelvis y espalda. Si la técnica aún no es sólida, hacelo bilateral con menos carga.",
+              "science": "Sesga la bisagra hacia una pierna sin exigir el equilibrio de un peso muerto totalmente a una pierna.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 3
+            },
+            {
+              "id": "ariel-b-goblet", "name": "Sentadilla goblet", "volume": "2 × 12–25 · RIR 1–2", "rest": "90s",
+              "description": "Sostené una mancuerna frente al pecho, hasta 40 lb si corresponde a tu capacidad. Bajá con talones apoyados y rodillas siguiendo la dirección de los pies.",
+              "tip": "Si 25 repeticiones son fáciles, agregá una pausa de 1–2s abajo o usá repeticiones de una y media con menos repeticiones. No sostengas varias mancuernas apiladas.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-b-gemelos", "name": "Elevación de talón a una pierna", "volume": "2 × 12–25 por lado · RIR 1–2", "rest": "60s después de ambos lados",
+              "description": "Desde el piso, sujetá una mancuerna en una mano y un soporte fijo con la otra. Subí el talón con pausa breve arriba y bajá controlado. Completá ambos lados.",
+              "tip": "No necesitás un escalón ni usar el remo de apoyo. Elegí la carga que permita completar el recorrido sin rebotes.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-b-plancha", "name": "Plancha lateral en el piso", "volume": "2 × 20–40s por lado", "rest": "45–60s después de ambos lados",
+              "description": "Codo bajo el hombro y pelvis alineada. Una serie incluye ambos lados. Terminá antes de perder la postura; apoyá rodillas para reducir dificultad.",
+              "tip": "No busques el fallo en una postura deteriorada. Progresá tiempo dentro del rango o la palanca, no ambos a la vez.",
+              "loggable": true, "sets": 2
+            }
+          ]
+        },
+        {
+          "id": "dia-b-metabolic", "title": "Acondicionamiento", "badge": "Motor",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "note": "8 min fáciles/moderados después de piernas; hoy no hay sprints.",
+          "exercises": [
+            { "id": "ariel-b-base-aerobica", "name": "Remo · Base aeróbica", "volume": "8 min continuos · RPE 4–5/10", "description": "Ritmo que permita hablar en frases completas. No se asigna una zona cardíaca porque no conocemos tus umbrales. Si las piernas están muy fatigadas, mantené RPE 3–4.", "tip": "La prioridad de hoy es recuperar para la próxima sesión, no maximizar la fatiga." }
+          ]
+        },
+        {
+          "id": "dia-b-cooldown", "title": "Vuelta a la calma", "badge": "Cooldown",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "id": "ariel-b-calma", "name": "Remo suave y movilidad de cadera", "volume": "2 min suaves + 2 min de movilidad", "description": "Bajá el ritmo y mové cadera y tobillos en un recorrido cómodo. No fuerces un estiramiento doloroso." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-c", "name": "Día C", "subtitle": "Superior — Hombros y jalón", "tag": "Masa + motor",
+      "summary": { "warmup": 6, "main": 42, "metabolic": 8, "cooldown": 4, "total": 60 },
+      "sections": [
+        {
+          "id": "dia-c-warmup", "title": "Calentamiento", "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "6 min. Preparar el empuje sobre cabeza sin fatigarlo.",
+          "exercises": [
+            { "id": "ariel-c-remo-suave", "name": "Remo de aire suave", "volume": "3 min · RPE 3–4/10", "description": "Ritmo cómodo y hombros relajados." },
+            { "id": "ariel-c-movilidad", "name": "Movilidad de hombros y columna torácica", "volume": "1 min · 6–8 movimientos suaves", "description": "Elevaciones de brazos sin peso y rotaciones torácicas cómodas. No forzar un recorrido que provoque dolor." },
+            { "id": "ariel-c-aproximacion", "name": "Aproximación al press y al jalón", "volume": "2 min · 1 serie ligera de cada uno", "description": "Press unilateral con mancuerna ligera y jalón con muy poca carga. Probá la posición de rodillas y la estabilidad." }
+          ]
+        },
+        {
+          "id": "dia-c-main", "title": "Trabajo Principal", "badge": "Main",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "Hasta 42 min. A1/A2 se alternan si podés; luego B1/B2 y C1/C2. RIR 2 en presses/jalón y 1–2 en accesorios. En A1, una serie incluye los dos brazos. Si las estaciones están ocupadas, usá series normales sin quitar descanso a los principales.",
+          "exercises": [
+            {
+              "id": "ariel-c-press-unilateral", "name": "A1 · Press de hombro unilateral de pie", "volume": "3 × 8–15 por brazo · RIR 2", "rest": "90–120s después de ambos brazos",
+              "description": "Mancuerna junto al hombro, costillas controladas y piernas quietas. Empujá sobre cabeza sin arquear la zona lumbar. Completá ambos brazos con la misma carga y repeticiones.",
+              "tip": "Empezá con la mancuerna adecuada, no necesariamente la de 30 o 40 lb. No es un push press. Si el recorrido no es cómodo, usá la máquina solo si tiene un ajuste vertical previsto por el fabricante.",
+              "science": "El press unilateral permite aprovechar una sola mancuerna más pesada sin usar un asiento inestable como banco.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 3
+            },
+            {
+              "id": "ariel-c-jalon", "name": "A2 · Jalón en polea alta desde rodillas", "volume": "4 × 10–20 · RIR 2", "rest": "90–120s antes de repetir A2",
+              "description": "Polea alta con barra recta corta y agarre cómodo, o cuerda. De rodillas frente a la polea, llevá codos hacia abajo sin tirar detrás de la nuca ni balancear el tronco.",
+              "tip": "Reducí carga si la polea te levanta o no podés mantener la posición. No improvises un anclaje de piernas. Si no encontrás una posición estable, sustituí por remo en polea a altura del abdomen o remo con mancuerna, con el mismo rango.",
+              "science": "Añade una tracción vertical para espalda sin requerir barra de dominadas. La sustitución por remo sigue siendo tracción, pero cambia el patrón.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 4
+            },
+            {
+              "id": "ariel-c-floor-press", "name": "B1 · Press con mancuernas en el piso", "volume": "3 × 10–20 · RIR 1–2", "rest": "90s antes de repetir B1",
+              "description": "Dos mancuernas iguales de hasta 30 lb cada una. Acostate y colocá las cargas con control; brazos a un ángulo cómodo del torso. Los tríceps tocan suavemente el piso antes de volver a empujar.",
+              "tip": "No uses el asiento del remo como banco. Si la carga disponible permite más de 20 fáciles, cambiá por flexiones en el piso con pausa y una palanca más exigente: 3 × 8–20.",
+              "science": "Empuje horizontal sin banco. El piso limita el recorrido inferior; no se presenta como equivalente a un press con mayor recorrido.",
+              "loggable": true, "sets": 3
+            },
+            {
+              "id": "ariel-c-face-pull", "name": "B2 · Face pull con cuerda", "volume": "2 × 12–25 · RIR 2", "rest": "60s antes de repetir B2",
+              "description": "Polea aproximadamente a altura de ojos. Tirá de la cuerda hacia la cara, separando manos con control, sin elevar hombros ni extender la espalda para mover la carga.",
+              "tip": "Usá poca carga. Si la polea está ocupada, hacé aperturas inversas con mancuernas ligeras en bisagra de cadera; no es una sustitución idéntica, pero trabaja hombro posterior y espalda alta.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-c-curl-martillo", "name": "C1 · Curl martillo con mancuernas", "volume": "2 × 10–20 · RIR 1–2", "rest": "60s antes de repetir C1",
+              "description": "Agarre neutro y codos junto al cuerpo, sin balanceo. Usá dos mancuernas iguales y alterná con C2 si hay espacio.",
+              "tip": "No elijas una carga que te obligue a acortar mucho el recorrido o usar la cadera.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-c-triceps", "name": "C2 · Extensión de tríceps con cuerda", "volume": "2 × 10–20 · RIR 1–2", "rest": "60s antes de repetir C2",
+              "description": "Polea alta, torso estable y codos junto al cuerpo. Extendé y regresá con control. Repetir un ejercicio permite comparar tu progresión entre sesiones.",
+              "tip": "Si la polea está ocupada, usá extensión tumbado en el piso con dos mancuernas ligeras iguales. No hagas fondos en un asiento móvil.",
+              "loggable": true, "sets": 2
+            }
+          ]
+        },
+        {
+          "id": "dia-c-metabolic", "title": "Acondicionamiento", "badge": "Motor",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "note": "8 min. Segunda sesión semanal de intervalos; ritmo controlado y repetible.",
+          "exercises": [
+            { "id": "ariel-c-intervalos", "name": "Remo · Intervalos con recuperación amplia", "volume": "4 × (40s vivo + 80s suave) = 8 min", "description": "Tramos vivos a RPE 7–8/10, recuperación a 3–4/10. Evitá empezar tan rápido que se derrumbe el ritmo. Semana 1: solo 2 tramos vivos y el resto de los 8 minutos, suaves.", "tip": "Si no recuperaste del día A o tu rendimiento en pesas cae, hacé los 8 minutos suaves. No sumar burpees, saltos ni otro finisher." }
+          ]
+        },
+        {
+          "id": "dia-c-cooldown", "title": "Vuelta a la calma", "badge": "Cooldown",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "id": "ariel-c-calma", "name": "Remo suave y movilidad cómoda", "volume": "2 min suaves + 2 min de movilidad", "description": "Bajá el ritmo y mové hombros y columna torácica sin forzar posiciones. Respiración normal, sin aguantar el aire." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dia-d", "name": "Día D", "subtitle": "Inferior — Posterior y unilateral", "tag": "Masa + control",
+      "summary": { "warmup": 6, "main": 42, "metabolic": 8, "cooldown": 4, "total": 60 },
+      "sections": [
+        {
+          "id": "dia-d-warmup", "title": "Calentamiento", "badge": "Warmup",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "6 min. Movimientos sencillos, sin saltos ni necesidad de espacio para desplazarte.",
+          "exercises": [
+            { "id": "ariel-d-remo-suave", "name": "Remo de aire suave", "volume": "3 min · RPE 3–4/10", "description": "Ritmo cómodo. Practicá la secuencia piernas, cadera y brazos." },
+            { "id": "ariel-d-patrones", "name": "Puente de glúteos y zancadas sin carga", "volume": "1 min · 6–8 de cada patrón", "description": "Puente en el piso con costillas controladas y zancadas hacia atrás cortas, dentro del recorrido cómodo." },
+            { "id": "ariel-d-aproximacion", "name": "Aproximación a bisagra y zancadas", "volume": "2 min · 1 serie ligera de cada uno", "description": "Ensayá el equilibrio y el apoyo antes de subir la carga. No cuentan como series de trabajo." }
+          ]
+        },
+        {
+          "id": "dia-d-main", "title": "Trabajo Principal", "badge": "Main",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "note": "Hasta 42 min. Primeros dos ejercicios por separado. Luego B1/B2 y C1/C2 pueden alternarse. RIR 2 en bisagra y zancadas; 1–2 en accesorios. Una serie unilateral incluye ambos lados. No sacrifiques descanso ni técnica para terminar más rápido.",
+          "exercises": [
+            {
+              "id": "ariel-d-rdl-unilateral", "name": "Peso muerto rumano a una pierna con apoyo", "volume": "3 × 8–15 por lado · RIR 2", "rest": "90–120s después de ambos lados",
+              "description": "Mancuerna en la mano opuesta a la pierna de apoyo y mano libre en un soporte fijo. Llevá cadera atrás, manteniendo pelvis relativamente nivelada y espalda estable. La pierna libre acompaña sin girar el tronco.",
+              "tip": "Una mancuerna de hasta 40 lb, según técnica. El apoyo es para equilibrio, no para impulsarte. Si no controlás el movimiento, repetí la variante B-stance del día B.",
+              "science": "Hace desafiante la bisagra con una sola mancuerna; el apoyo permite que el equilibrio no sea el principal limitante.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 3
+            },
+            {
+              "id": "ariel-d-zancada", "name": "Zancada hacia atrás con mancuernas", "volume": "3 × 8–15 por pierna · RIR 2", "rest": "120s después de ambas piernas",
+              "description": "Dos mancuernas iguales de hasta 30 lb cada una. Desde posición de pie, llevá un pie hacia atrás, bajá con control y volvé empujando principalmente con la pierna delantera. Trabajá ambos lados sin apurarte.",
+              "tip": "Si no hay espacio o el equilibrio limita, usá split squat fijo con ambos pies en el piso. Empezá por el lado más débil y registrá una serie después de ambos lados.",
+              "isKey": true, "keyBadge": "BASE", "loggable": true, "sets": 3
+            },
+            {
+              "id": "ariel-d-walkout", "name": "B1 · Caminata de talones desde puente", "volume": "2 × 6–10 ciclos · RIR técnico 2", "rest": "75–90s antes de repetir B1",
+              "description": "Acostado en el piso, levantá la pelvis y alejá los talones con pasos cortos; luego acercalos sin perder control. Una ida y vuelta es un ciclo. Frená antes de que la zona lumbar compense.",
+              "tip": "No necesitás discos deslizantes ni un piso resbaladizo. Acortá la distancia si hay calambres; si persisten, cambiá por puente bilateral con talones algo más alejados y recorrido cómodo.",
+              "science": "Agrega demanda de isquiotibiales con flexión/extensión de rodilla sin una máquina de curl; no es un curl femoral idéntico.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-d-dead-bug", "name": "B2 · Dead bug en el piso", "volume": "2 × 8–12 por lado", "rest": "45–60s antes de repetir B2",
+              "description": "Acostado, caderas y rodillas flexionadas. Extendé brazo y pierna contrarios manteniendo el tronco estable; exhalá al extender. Una serie incluye ambos lados.",
+              "tip": "Acortá el recorrido si arqueás la espalda. No necesitas llegar al fallo ni agregar carga para que sea útil.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-d-goblet", "name": "C1 · Sentadilla goblet con pausa", "volume": "2 × 12–20 · RIR 1–2", "rest": "90s antes de repetir C1",
+              "description": "Una mancuerna de hasta 40 lb al pecho. Pausa de 1–2s en la parte baja de un recorrido cómodo, sin relajar el tronco ni rebotar. Alterná con C2.",
+              "tip": "La pausa ayuda a estandarizar y hacer exigente el ejercicio; no reemplaza indefinidamente una carga mayor cuando se vuelve fácil.",
+              "loggable": true, "sets": 2
+            },
+            {
+              "id": "ariel-d-gemelos", "name": "C2 · Elevación de talón a una pierna", "volume": "2 × 15–25 por lado · RIR 1–2", "rest": "60s después de ambos lados",
+              "description": "Desde el piso y con soporte fijo para equilibrio, subí y bajá el talón sin rebotes. Podés sostener una mancuerna con la mano libre. Completá ambas piernas.",
+              "tip": "No uses el asiento del remo como plataforma ni apiles mancuernas para ganar altura.",
+              "loggable": true, "sets": 2
+            }
+          ]
+        },
+        {
+          "id": "dia-d-metabolic", "title": "Acondicionamiento", "badge": "Motor",
+          "badgeStyle": "bg-emerald/10 text-emerald border border-emerald/20",
+          "note": "8 min moderados; cerrar la semana sin otro esfuerzo máximo.",
+          "exercises": [
+            { "id": "ariel-d-base-aerobica", "name": "Remo · Continuo moderado", "volume": "8 min continuos · RPE 4–5/10", "description": "Ritmo sostenible que permita hablar en frases completas. Si la bisagra cargó mucho la espalda o estás muy fatigado, bajá la intensidad; no remar con dolor.", "tip": "Buscá regularidad del esfuerzo. La progresión inicial es sostener mejor ese ritmo, no hacerlo duro cada semana." }
+          ]
+        },
+        {
+          "id": "dia-d-cooldown", "title": "Vuelta a la calma", "badge": "Cooldown",
+          "badgeStyle": "bg-plasma/10 text-plasma border border-plasma/20",
+          "exercises": [
+            { "id": "ariel-d-calma", "name": "Remo suave y movilidad de cadera", "volume": "2 min suaves + 2 min de movilidad", "description": "Terminá suave. Movilidad cómoda de cadera y tobillos, sin rebotes ni estiramientos intensos sobre músculos fatigados." }
+          ]
+        }
+      ]
+    }
+  ],
+  "weeklySchedule": [
+    { "weekday": 1, "day": "Lunes", "session": "A", "dayId": "dia-a", "name": "Superior — Pecho y remo", "color": "#A78BFA" },
+    { "weekday": 2, "day": "Martes", "session": "B", "dayId": "dia-b", "name": "Inferior — Sentadilla y bisagra", "color": "#A78BFA" },
+    { "weekday": 3, "day": "Miércoles", "session": "Descanso", "name": "Recuperación · paseo opcional", "color": "#3F3F46" },
+    { "weekday": 4, "day": "Jueves", "session": "C", "dayId": "dia-c", "name": "Superior — Hombros y jalón", "color": "#A78BFA" },
+    { "weekday": 5, "day": "Viernes", "session": "D", "dayId": "dia-d", "name": "Inferior — Posterior y unilateral", "color": "#A78BFA" },
+    { "weekday": 6, "day": "Sábado", "session": "Descanso", "name": "Recuperación · actividad suave opcional", "color": "#3F3F46" },
+    { "weekday": 7, "day": "Domingo", "session": "Descanso", "name": "Recuperación", "color": "#3F3F46" }
+  ],
+  "scienceFactors": [
+    { "element": "Semana 1 — adaptación", "reason": "Usá RIR 3 y cargas conservadoras en todas las series. En remo, empezá con la mitad de los intervalos fuertes y completá el tiempo suave. Si necesitás reducir series, registrá solo las realizadas: no marques las omitidas para lograr 100%. No sumar un WOD extra." },
+    { "element": "Progresión con pesos fijos", "reason": "Anotá carga y repeticiones aparte: la app registra series, no kilos ni RIR. Cuando completás todas las series al máximo del rango con RIR 1–2 en dos sesiones, subí al siguiente peso disponible. Si el salto es demasiado grande, seguí consolidando repeticiones; no fuerces el salto." },
+    { "element": "Cuando llegás al límite de carga", "reason": "Usá una variante unilateral o una palanca más exigente, recorrido cómodo completo y pausas breves. Volvé al mínimo del rango al cambiar variante. No prometen fuerza máxima ilimitada: para seguir mejorando mucho en 1RM eventualmente hará falta más carga." },
+    { "element": "Unilateral y material real", "reason": "Hay una mancuerna de 40 lb y dos de 30 lb. Los bilaterales usan dos iguales; los unilaterales permiten aprovechar la de 40. Una serie de un ejercicio por lado incluye ambos lados, no se duplica el número de sets en la app. No usar el asiento móvil del remo como banco." },
+    { "element": "Fuerza primero, motor después", "reason": "Dos finales de intervalos controlados y dos de remo moderado. Esta dosis corta es un complemento de acondicionamiento, no una reproducción de CrossFit ni un programa aeróbico completo. Si cae el rendimiento o la recuperación, convertí un día de intervalos en remo suave." },
+    { "element": "Tiempo y recuperación", "reason": "Presupuesto estimado: 6 min de calentamiento, hasta 42 de pesas, 8 de remo y 4 de vuelta a la calma. Incluye descansos y cambios de lado; no es una garantía cronometrada. Si falta tiempo, reducí la última pareja de accesorios, no los descansos de los principales." },
+    { "element": "Descarga y seguridad", "reason": "Si durante una semana empeoran claramente rendimiento o recuperación, reducí las series 30–50%, usá RIR 3–4 y remo suave. No buscar fallo en bisagras o posturas de core. Ante dolor agudo, mareo o síntomas inusuales, detené la sesión y consultá según corresponda." }
+  ]
+}

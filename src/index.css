@@ -248,6 +248,34 @@
     background: linear-gradient(145deg, rgba(123, 97, 255, 0.05), transparent 60%);
   }
 
+  .info-panel-toggle {
+    min-height: 44px;
+    cursor: pointer;
+    transition: background-color 180ms ease;
+  }
+
+  .info-panel-toggle:hover { background-color: rgba(255, 255, 255, 0.025); }
+  .info-panel-toggle:focus-visible { outline: 2px solid #c4b5fd; outline-offset: -3px; }
+
+  .info-panel-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    transition: grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms ease, visibility 0s linear 280ms;
+  }
+
+  .info-panel[data-expanded='true'] > .info-panel-body {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .info-panel-clip { min-height: 0; overflow: hidden; }
+  .info-panel-chevron { transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .info-panel[data-expanded='true'] > .info-panel-toggle .info-panel-chevron { transform: rotate(180deg); }
+
   .summary-number-loading {
     background: linear-gradient(100deg, #52525b 20%, #c4b5fd 45%, #52525b 70%);
     background-size: 250% 100%;
@@ -293,7 +321,10 @@
 
   @media (prefers-reduced-motion: reduce) {
     .liquid-nav-indicator,
-    .liquid-nav-tab { transition: none; }
+    .liquid-nav-tab,
+    .info-panel-body,
+    .info-panel-chevron,
+    .info-panel-toggle { transition: none; }
 
     .routine-content-transition,
     .app-shell,

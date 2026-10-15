@@ -39,6 +39,16 @@
       "goal": "Base Atlética",
       "accentColor": "#38BDF8",
       "file": "/routines/full-body-foundation.json"
+    },
+    {
+      "id": "ariel-masa-fuerza",
+      "name": "Ariel N°1 — Masa y fuerza",
+      "description": "Cuatro días superior/inferior para ganar músculo, desarrollar fuerza con cargas limitadas y mantener el motor con remo. Mancuernas fijas, máquina de press, polea regulable y piso; sin banco ni barras.",
+      "level": "Intermedio",
+      "frequency": "4 días/semana · ~60 min",
+      "goal": "Masa, fuerza y acondicionamiento",
+      "accentColor": "#A78BFA",
+      "file": "/routines/ariel-masa-fuerza.json"
     }
   ]
 }

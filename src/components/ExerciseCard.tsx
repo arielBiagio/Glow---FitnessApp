@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { ChevronDown, ChevronUp, AlertCircle, Check, Activity } from 'lucide-react';
+import CollapsibleInfo from './CollapsibleInfo';
 import type { Exercise } from '../types';
 
 interface ExerciseCardProps {
@@ -119,25 +120,23 @@ function ExerciseCard({ exercise, isCompleted, completedSets = [], onToggleSet, 
           )}
 
           {exercise.science && (
-            <div className="p-3 rounded-xl bg-plasma/5 border border-plasma/10 flex gap-2">
-              <Activity className="w-4 h-4 text-plasma-ink mt-0.5 flex-shrink-0" />
+            <CollapsibleInfo context={`Fundamento de ${exercise.name}`} icon={Activity}>
               <div>
                 <span className="block text-[9px] font-mono uppercase tracking-widest text-plasma-ink font-semibold">EMG / Sports Science</span>
                 <p className="text-zinc-300 italic font-light mt-0.5 leading-relaxed font-sans text-xs">
                   "{exercise.science}"
                 </p>
               </div>
-            </div>
+            </CollapsibleInfo>
           )}
 
           {exercise.tip && (
-            <div className="flex gap-2">
-              <AlertCircle className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+            <CollapsibleInfo context={`Ejecución de ${exercise.name}`} icon={AlertCircle} tone="emerald">
               <div>
                 <span className="block text-[9px] font-mono uppercase tracking-widest text-emerald-400 font-semibold">Ejecución</span>
                 <p className="text-zinc-400 leading-relaxed mt-0.5 text-xs">{exercise.tip}</p>
               </div>
-            </div>
+            </CollapsibleInfo>
           )}
         </div>
       )}

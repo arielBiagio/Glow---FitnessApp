@@ -86,6 +86,38 @@ Los pasos de configuración siguientes también sirven para repetir la instalaci
 en otro proyecto. En este proyecto la función ya está desplegada, como se indica
 arriba: no repetir migraciones ya aplicadas ni volver a ejecutar todo sin necesidad.
 
+### Corrección de estadísticas en Supabase alojado (2026-10-14)
+
+Se confirmó desde el conector que perfil, rutina y entrenamiento responden, pero
+`mis_estadisticas` falla. SQL Editor identificó `42501: permission denied for
+schema auth`: la función existe y tiene EXECUTE, pero el rol del editor no tiene
+USAGE WITH GRANT OPTION sobre el esquema gestionado `auth`, y por tanto el GRANT
+de USAGE al rol MCP no tiene efecto. No significa que falte toda la migración 004.
+
+Para este caso, copiar **completo en una nueva query** y ejecutar:
+
+`supabase/migrations/202610140005_mcp_statistics_identity.sql`
+
+La 005 reemplaza únicamente el RPC de estadísticas. Obtiene `sub`, `role` y
+`client_id` desde `request.jwt.claims`, que PostgREST configura después de validar
+el JWT. No acepta identidad o claims como parámetros del RPC. Verifica el rol SQL
+real y el rol del JWT, requiere UUID y cliente OAuth, y conserva SECURITY INVOKER,
+STABLE, search_path vacío, RLS y los mismos filtros de fechas/usuario. No crea
+helpers SECURITY DEFINER ni amplía membresías o permisos del esquema `auth`.
+Los permisos EXECUTE quedan limitados al rol MCP, no PUBLIC/anon/authenticated/
+service_role. No modifica datos ni políticas; incluye COMMIT y recarga de caché.
+
+La preparación está probada localmente sin USAGE de `auth` para `glow_mcp_reader`.
+Typecheck, lint, build y 69/69 pruebas pasaron; 22 son comprobaciones SQL reales
+en PostgreSQL efímero. La regresión reprodujo primero el error de la 004.
+**El usuario confirmó aplicar la 005.** Después, `mis_estadisticas` respondió sin
+error desde el conector autenticado para `historico` y `esta_semana`. Los valores
+personales no se guardaron en el repositorio; fue una comprobación puntual de
+lectura, no QA completo de producción. No repetir la migración si ya fue aplicada.
+No necesita build/ZIP de Netlify, cambios del hook, reconexión OAuth ni despliegue
+de la Edge Function. No repetir 003/004 ni convertir el RPC completo en SECURITY
+DEFINER para solucionar este error.
+
 ### 1. Aplicar solamente la nueva migración
 
 En el SQL Editor, ejecutar completo:
@@ -275,7 +307,9 @@ esa ventana o añadir comprobación de revocación antes de prometer corte inmed
   y rol `glow_mcp_reader`. Reconectar para obtener tokens nuevos después de activar
   el hook. No pegar tokens en tickets, logs o conversaciones.
 - **Error de permiso al consultar:** comprobar que se aplicaron 003 y 004 y que el
-  perfil existe. No intentar resolverlo usando una clave de servicio.
+  perfil existe. El mensaje de 004 agrupa varios errores de permisos/caché. Si la
+  función existe pero falla por `schema auth`, seguir la corrección 005 anterior.
+  No intentar resolverlo usando una clave de servicio.
 - **Origin rechazado:** comprobar el Origin real del cliente y añadir solo ese
   origen de confianza a `GLOW_MCP_ALLOWED_ORIGINS`, no un wildcard.
 
@@ -286,3 +320,5 @@ esa ventana o añadir comprobación de revocación antes de prometer corte inmed
 - [Supabase: Auth Hooks](https://supabase.com/docs/guides/auth/auth-hooks).
 - [Supabase: Token Security y RLS](https://supabase.com/docs/guides/auth/oauth-server/token-security).
 - [Supabase: desplegar tu propio MCP](https://supabase.com/docs/guides/ai-tools/byo-mcp).
+- [PostgREST: claims JWT por transacción](https://docs.postgrest.org/en/stable/references/transactions.html).
+- [Supabase: limitaciones de grants del esquema auth](https://github.com/orgs/supabase/discussions/9314).

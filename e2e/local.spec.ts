@@ -13,6 +13,65 @@ async function enterLocal(page: import('@playwright/test').Page) {
   await expect(metric(page, 'Días entrenando')).toHaveText('0');
 }
 
+test('información plegable: notas independientes, teclado y progreso intacto', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('glow-selected-routine', 'ariel-masa-fuerza'));
+  await enterLocal(page);
+  const about = page.getByRole('button', { name: 'Información: Sobre tu rutina', exact: true });
+  await expect(about).toHaveAttribute('aria-expanded', 'true');
+  await about.focus();
+  await page.keyboard.press('Enter');
+  await expect(about).toHaveAttribute('aria-expanded', 'false');
+  await dayA(page).click();
+  const note = page.getByRole('button', { name: 'Información: Calentamiento', exact: true });
+  const main = page.getByRole('button', { name: 'Información: Trabajo Principal', exact: true });
+  const panel = note.locator('..');
+  const contentId = await note.getAttribute('aria-controls');
+  const content = page.locator(`[id="${contentId}"]`);
+  const expandedHeight = (await panel.boundingBox())!.height;
+  await expect(content).toContainText('6 min en total');
+  await page.getByRole('button', { name: 'Marcar Remo de aire suave como completado', exact: true }).click();
+  await note.click();
+  await expect(note).toHaveAttribute('aria-expanded', 'false');
+  await expect(content).toHaveAttribute('aria-hidden', 'true');
+  await expect(content).toHaveAttribute('inert', '');
+  await expect(content).toHaveCSS('visibility', 'hidden');
+  await expect.poll(async () => (await panel.boundingBox())!.height).toBeLessThan(52);
+  expect(expandedHeight).toBeGreaterThan(75);
+  await expect(main).toHaveAttribute('aria-expanded', 'true');
+  await note.focus();
+  await page.keyboard.press('Space');
+  await expect(note).toHaveAttribute('aria-expanded', 'true');
+  await expect(content).toHaveCSS('visibility', 'visible');
+  await expect(page.getByRole('button', { name: 'Marcar Remo de aire suave como incompleto', exact: true })).toBeVisible();
+  await expect(page.locator('#console-board')).toContainText('1 de 11 ejercicios');
+  await page.getByRole('button', { name: /A1 · Press de pecho en máquina, pendiente/ }).click();
+  const science = page.getByRole('button', { name: 'Información: Fundamento de A1 · Press de pecho en máquina', exact: true });
+  const tip = page.getByRole('button', { name: 'Información: Ejecución de A1 · Press de pecho en máquina', exact: true });
+  await science.click();
+  await expect(science).toHaveAttribute('aria-expanded', 'false');
+  await expect(tip).toHaveAttribute('aria-expanded', 'true');
+  await page.getByRole('navigation').getByRole('button', { name: /Día B —/ }).click();
+  await expect(page.getByRole('button', { name: 'Información: Calentamiento', exact: true })).toHaveAttribute('aria-expanded', 'true');
+});
+
+test('información plegable: respeta movimiento reducido y conserva el botón compacto', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => localStorage.setItem('glow-selected-routine', 'ariel-masa-fuerza'));
+  await enterLocal(page);
+  await dayA(page).click();
+  const note = page.getByRole('button', { name: 'Información: Calentamiento', exact: true });
+  const content = page.locator(`[id="${await note.getAttribute('aria-controls')}"]`);
+  await expect(content).toHaveCSS('transition-duration', '0s');
+  await note.click();
+  await expect(content).toHaveCSS('visibility', 'hidden');
+  await expect(note).toBeVisible();
+  await expect(note).toHaveText('Información');
+  await page.screenshot({ animations: 'disabled', path: 'qa-artifacts/info-collapsed-mobile.png' });
+  await note.click();
+  await expect(content).toHaveCSS('visibility', 'visible');
+  await page.screenshot({ animations: 'disabled', path: 'qa-artifacts/info-expanded-mobile.png' });
+});
+
 test('calendario automático sin selector ni activación, con persistencia por fecha', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));

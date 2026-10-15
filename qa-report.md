@@ -1,5 +1,143 @@
 # QA Report: GLOW (2026-10-12)
 
+## Cuadros informativos plegables (2026-10-14)
+
+**Veredicto: implementado y comprobado localmente.**
+Se agregó `CollapsibleInfo` para notas de todas las secciones de entrenamiento,
+fundamentos/consejos de ejercicios, Sobre tu rutina y Principios del Protocolo.
+No se ocultan estadísticas, progreso, controles de registro o avisos de error.
+Los cuadros empiezan abiertos; el botón de Información los reduce a una fila
+compacta con icono y chevron. Estados independientes y claves por día/sección
+evitan trasladar el plegado de una nota al cambiar de entrenamiento.
+
+- Animación CSS de altura por grid (280ms), opacidad y chevron; sin alturas máximas
+  arbitrarias. Se respeta prefers-reduced-motion.
+- Botón nativo con área de al menos 44px, aria-expanded/controls, foco visible y
+  activación Enter/Espacio. Contenido cerrado con aria-hidden/inert y visibility.
+- Base y final: typecheck, lint, build y 77/77 pruebas locales correctos.
+- **2/2 E2E focalizados** en Chrome móvil, build aislado sin Supabase real: clic,
+  teclado, reducción de altura, independencia, notas de ejercicios, cambio de día,
+  progreso intacto y movimiento reducido. No QA completo ni suite E2E completa.
+- Capturas inspeccionadas: [plegado](qa-artifacts/info-collapsed-mobile.png) y
+  [abierto](qa-artifacts/info-expanded-mobile.png).
+- Sin escrituras en producción, despliegue, commit o push. No se tocó MCP.
+  Queda probar el gesto en Safari/iPhone real; no se afirma validación allí.
+
+## Servidor local para revisión (2026-10-14)
+
+La instancia Vite iniciada en el entorno restringido escuchaba en 127.0.0.1:5173,
+pero una solicitud fuera de ese entorno agotó 12s sin respuesta HTTP. Se detuvo
+solo esa instancia propia y se reinició el mismo comando fuera de la restricción,
+manteniendo acceso únicamente por loopback. La página respondió HTTP 200; el
+manifest incluyó `ariel-masa-fuerza` y su JSON respondió con cuatro días.
+Comprobación puntual de disponibilidad local, no validación visual/login ni QA
+completo. Sin cambios de código, datos de Supabase, commit o publicación.
+
+## Rutina Ariel: estructura y registro (2026-10-14)
+
+**Veredicto técnico: listo localmente; publicación y prueba práctica pendientes.**
+Se añadió `ariel-masa-fuerza.json` al catálogo, preservando las cuatro rutinas
+anteriores, UI, código MCP y datos existentes. La guía `docs/rutina-ariel.md`
+documenta equipo, alternativas, progresión, límites y fuentes de entrenamiento.
+
+- Base: typecheck, lint, build y 69/69 pruebas correctos.
+- Final: typecheck, lint, build y **77/77** pruebas correctos; 8 nuevas pruebas
+  específicas de JSON, calendario y operaciones de progreso en cada día.
+- Compatible con esquema anterior y validadores de app/catálogo, metadata igual
+  en manifest/documento, IDs únicos, sets coherentes con volumen, carga JSON bajo
+  200 KB y calendario de cuatro días en siete entradas.
+- Presupuesto declarado 6+42+8+4=60 min, con cuatro secciones. Se verifica la suma,
+  no que una persona tarde exactamente 60 min ni la eficacia clínica/deportiva.
+- Registro de una ronda unilateral como una serie, finalización de los cuatro
+  días, snapshots y activación SQL de todas las rutinas en base efímera correctos.
+  Los tests de catálogo ya no presuponen exactamente cuatro entradas.
+- [Evidencia](qa-artifacts/ariel-routine-vitest-results.json).
+- Sin E2E/QA visual completo, Lighthouse, despliegue, consultas de producción,
+  commit ni push. No se tocaron las modificaciones previas de la migración 005.
+
+## Corrección 005 de estadísticas MCP (2026-10-14)
+
+**Veredicto: aplicada por el usuario y verificada desde el MCP.**
+**Tipo:** RPC PostgreSQL / MCP. **Entorno:** PGlite y mocks locales, sin datos reales.
+
+Después de la confirmación del usuario, se consultó su conector autenticado en
+solo lectura: `mis_estadisticas` respondió sin error para `historico` y
+`esta_semana`. El fallo de permisos quedó resuelto en esas dos consultas reales.
+No se guardaron valores personales ni se modificaron datos desde el conector.
+Esto es una comprobación puntual autorizada, no QA completo de producción.
+
+### Bug confirmado y arreglado localmente [S2]
+
+La migración 004 ejecutaba `auth.uid()/auth.jwt()` dentro del cuerpo PL/pgSQL.
+El usuario confirmó que el rol del SQL Editor carece de USAGE WITH GRANT OPTION
+en `auth`, y el rol MCP queda sin USAGE. La función fallaba con `42501: permission
+denied for schema auth`, aunque tenía EXECUTE. Las políticas ya creadas y las
+otras lecturas respondían correctamente.
+
+Primero se agregó una regresión sin USAGE de `auth`, que falló con el mismo
+mensaje. La nueva `202610140005_mcp_statistics_identity.sql` reemplaza solo el
+RPC: lee identidad/rol/cliente de `request.jwt.claims`, configurado por PostgREST
+tras validar el token, y exige rol SQL y JWT `glow_mcp_reader`, UUID y cliente
+OAuth. No admite identidad en parámetros. Conserva SECURITY INVOKER, STABLE,
+search_path vacío, filtros, RLS y permisos de lectura. No modifica datos,
+políticas, membresías ni objetos de `auth`. Revoca EXECUTE de roles públicos y de
+servicio, concede solo al rol MCP y notifica recarga de caché al confirmar.
+
+### Pruebas y evidencias
+
+- Base: typecheck, lint, build y 64/64 pruebas correctos.
+- Regresión previa al fix: 1 falló con `permission denied for schema auth`.
+- Final: typecheck, lint, build y **69/69** pruebas correctos; SQL 22/22.
+- Toda la suite SQL corre con el rol MCP sin USAGE de `auth`.
+- Se comprueba aislamiento A/B, permisos de escritura denegados, rango/estado/
+  minutos, ausencia de sesiones, claims ausentes/inválidos, cliente vacío o de
+  tipo incorrecto, rol discordante, contexto JSON sin variable legacy, RLS ante
+  identidades discordantes, migración repetible e invoker/ACL sin elevación.
+- [Evidencia local](qa-artifacts/mcp-statistics-005-vitest-results.json).
+
+### Qué falta / no se ejecutó
+
+El usuario confirmó ejecutar la 005; ambas consultas reales posteriores fueron
+correctas. Desde el agente no se ejecutó SQL remoto,
+despliegue, E2E, Lighthouse, QA completo, commit o push. Netlify y la Edge Function
+no requieren actualización. La documentación incluye el procedimiento.
+
+## Diagnóstico puntual: estadísticas MCP (2026-10-14)
+
+Actualización: SQL Editor confirmó que la función existe y el rol tiene EXECUTE.
+La verificación posterior a BEGIN/GRANT/COMMIT muestra USAGE de `auth` en false
+y EXECUTE de `auth.uid()`/`auth.jwt()` en true. La hipótesis de un ROLLBACK
+accidental no explica este resultado. Hay un caso documentado por Supabase de
+roles SQL sin grant option para delegar USAGE del esquema gestionado `auth`:
+https://github.com/orgs/supabase/discussions/9314 . Pendiente confirmar propietario
+del esquema y grant option del rol del SQL Editor. No ampliar membresías a
+`authenticated`, desactivar RLS ni convertir el agregado completo en definer.
+La ejecución con rol `glow_mcp_reader` e identidad ficticia falló con `42501`,
+«permission denied for schema auth», en la comprobación `auth.uid()/auth.jwt()`.
+El usuario confirmó aplicar los grants USAGE de `auth` y EXECUTE de esos dos
+helpers. La consulta posterior de `mis_estadisticas` desde el conector todavía
+devuelve el mensaje genérico de 004. Pendiente repetir la ejecución SQL aislada
+para identificar el error vigente; no se considera resuelto ni se asume que
+falte la migración completa. Sin despliegue o cambios adicionales de permisos.
+
+**Veredicto: fallo remoto confirmado en `mis_estadisticas`; causa SQL exacta pendiente.**
+Se consultó el conector GLOW por pedido explícito del usuario, únicamente en
+lectura, sin guardar los resultados personales ni modificar datos o permisos.
+
+- `mi_perfil`, `mi_rutina` y `mi_entrenamiento` respondieron sin error.
+- `mis_estadisticas` devolvió: «Falta habilitar la migración 004 de lectura de
+  entrenamientos para el MCP.»
+- `queryError` en `workoutReader.ts` agrupa los códigos `42501` (permisos) y
+  `PGRST202` (función no encontrada en caché/esquema) en ese mismo mensaje.
+  Por tanto, no se puede concluir que falte toda la migración. Las lecturas de
+  entrenamiento funcionan, pero la llamada al RPC de estadísticas falla.
+- Typecheck, lint y build correctos; 29/29 pruebas locales de SQL y lectura de
+  entrenamientos correctas, con datos ficticios. Sin QA completo ni E2E.
+- Pendiente: comprobar en SQL Editor la existencia de
+  `public.glow_mcp_statistics(date,date)` y su permiso EXECUTE para
+  `glow_mcp_reader`. Si existen, revisar permisos internos/caché con evidencia
+  antes de modificar nada. No se reaplicó 004 ni se desplegó código.
+
 ## MCP 0.2.0: rutinas, calendario y estadísticas (2026-10-12)
 
 **Veredicto: implementado y desplegado; preguntas reales en Sesame pendientes.**
